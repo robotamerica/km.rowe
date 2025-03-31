@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>km.rowe</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body class="alt-mode">
+  <div class="scanlines"></div>
+
+  <header>
+    <div class="logo blinking-cursor">km.rowe</div>
+    <nav>
+      <a href="index.html">home</a>
+      <a href="chapbooks.html">chapbooks</a>
+      <a href="blog.html">blog</a>
+      <a href="links.html">links</a>
+    </nav>
+    <button class="toggle-mode" onclick="toggleCRT()" id="modeToggle">green mode</button>
+  </header>
+
+  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>
+
+  <main class="about-container">
+    <section class="about-text">
+      <h1>about</h1>
+      <p>
+        km.rowe is a terrible polymath. he is a poet, writer, printer, photographer,
+        geographer, and multidisciplinary artist working out of xalapa, mexico. this
+        site is an archive of his poetic works. you can meet his other personalities 
+        in the <a href="links.html">links</a> section, check out his <a href="blog.html">blog</a>,
+        or browse some of his <a href="chapbooks.html">chapbooks</a> while you are here.
+      </p>
+    </section>
+
+    <aside class="about-image">
+      <img src="assets/kmrowelogo.png" alt="km.rowe portrait" class="crt-image" />
+    </aside>
+  </main>
+
+  <script>
+    // Apply stored mode on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedMode = localStorage.getItem('mode');
+      const body = document.body;
+      const modeBtn = document.getElementById('modeToggle');
+      if (savedMode === 'crt-mode') {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        if (modeBtn) modeBtn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        if (modeBtn) modeBtn.textContent = 'green mode';
+      }
+    });
+  
+    function toggleCRT() {
+      const body = document.body;
+      const modeBtn = document.getElementById('modeToggle');
+      const isAlt = body.classList.contains('alt-mode');
+      if (isAlt) {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        localStorage.setItem('mode', 'crt-mode');
+        modeBtn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        localStorage.setItem('mode', 'alt-mode');
+        modeBtn.textContent = 'green mode';
+      }
+      playClickSound();
+    }
+  
+    function playClickSound() {
+      const sound = document.getElementById('click-sound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
+  
+    document.addEventListener('click', () => {
+      playClickSound();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+[
+  {
+    "title": "Hello World",
+    "date": "2025-03-31",
+    "category": "general",
+    "description": "Welcome post on mapping, poetry, and digital chaos.",
+    "file": "hello-world.md"
+  },
+  {
+    "title": "Signal Decay",
+    "date": "2025-03-28",
+    "category": "machine dreams",
+    "description": "On transmitting memory across distance and dust.",
+    "file": "signal-decay.md"
+  },
+  {
+    "title": "First Breath of Static",
+    "date": "2025-03-27",
+    "category": "poetics",
+    "description": "A short note on the shape of silence in code.",
+    "file": "first-breath.md"
+  },
+  {
+    "title": "Cartography of Absence",
+    "date": "2025-03-25",
+    "category": "mapping",
+    "description": "Drawing invisible geographies of loss and longing.",
+    "file": "cartography-of-absence.md"
+  },
+  {
+    "title": "Pixel Memories",
+    "date": "2025-03-22",
+    "category": "machine dreams",
+    "description": "Fragments of emotion encoded in CRT phosphor.",
+    "file": "pixel-memories.md"
+  },
+  {
+    "title": "Geohaiku",
+    "date": "2025-03-20",
+    "category": "poetics",
+    "description": "Haikus mapped onto digital terrain.",
+    "file": "geohaiku.md"
+  },
+  {
+    "title": "Nodes of Self",
+    "date": "2025-03-18",
+    "category": "fragments",
+    "description": "Reflections scattered across coordinates.",
+    "file": "nodes-of-self.md"
+  },
+  {
+    "title": "The Sound of Latitude",
+    "date": "2025-03-15",
+    "category": "mapping",
+    "description": "What GPS feels like when sung from the body.",
+    "file": "the-sound-of-latitude.md"
+  },
+  {
+    "title": "Ghosts in the Grid",
+    "date": "2025-03-13",
+    "category": "machine dreams",
+    "description": "Residual hauntings in abandoned web spaces.",
+    "file": "ghosts-in-the-grid.md"
+  }
+]

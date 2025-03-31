@@ -1,0 +1,22 @@
+{
+  "name": "posts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/watch.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.7"
+  },
+  "devDependencies": {
+    "chokidar": "^4.0.3"
+  }
+}

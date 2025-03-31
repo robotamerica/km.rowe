@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>the colour mirror – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .blue-mode {
+      color: #aaf0ff;
+    }
+    .green-mode {
+      color: #9aff9a;
+    }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    
+.container {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 6rem 1rem 3rem 1rem;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+.book-box {
+  width: 90%;
+  max-width: 720px;
+  height: 60vh;
+  border: 2px solid currentColor;
+  padding: 2rem;
+  margin: 1rem;
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 20px currentColor;
+  overflow-y: auto;
+}
+.page-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+@media screen and (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+    top: 5px;
+    right: 5px;
+  }
+  .book-box {
+    height: 50vh;
+    padding: 1rem;
+  }
+}
+
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣀⣀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⣀⣀⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⢸⣿⣿⣿⣿⡿⠟⠁⠀⠀⣀⣾⣿⣿⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⢸⣿⣿⡿⠋⠀⠀⠀⣠⣾⣿⡿⠋⠁⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⢸⠟⠉⠀⠀⢀⣴⣾⣿⠿⠋⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⣠⣴⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠀⣠⣾⣿⡿⠋⠁⠀⠀⠀⠀⠀⣠⣶⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⢸⣿⠿⠋⠀⠀⠀⠀⠀⢀⣠⣾⡿⠟⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠘⠁⠀⠀⠀⠀⠀⢀⣴⣿⡿⠋⣠⣴⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⣠⣾⣿⠟⢁⣠⣾⣿⣿⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⢀⣠⣾⡿⠋⢁⣴⣿⣿⣿⣿⣿⠀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣿⣀⣀⣀⣈⣉⣉⣀⣀⣉⣉⣉⣉⣉⣉⣉⣀⣿⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⠛⠛⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠛⠛⠃⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+</pre>
+    <h1>the colour mirror</h1>
+    <h2>by kevin m rowe</h2>
+    <p><em>click the mirror to begin</em></p>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1 of 51</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+    const stanzas = ['I asked myself:\n“what is the difference\nbetween adultery and\nidolatry?”', '“Nothing” I said,\n“you either want to\nbe a celebrity or\nfuck one.”', 'Rejoice\nrejoindre\nreplace myself,\ncelebratory leprosy\nI lose 35, 000 skin\ncells an hour. I am\nalways\nanew.', 'always\nbecoming.', 'always\nchanging.', 'Little duckling\ntiny baby gosling\nbaby baby changeling\nflying south in an\nantique sky.\nPaint me a portrait\nof that sky so pink\na single speck\na bird on the horizon\na pigeon\na carrier pigeon\npigeon post\nan undelivered love letter\nto a stranger\nfrozen in time\nthe pigeons\nmission.', 'Forget missionary position\nand forget the\ncrossroads\nforget the hollow\nhallows and\nlet the saints decay\nand turn to dust\nthe dust that billows out\nfrom old books\nopened by aging\nlibrarians\ndust to dust\nwhere\nrusting religions\ncorrupt love.', 'I have written this before\nbut before it was different.\nI used to know what\ndifference was\nwhat has another\nname \xa0 \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0must\nbe different, and\nwhat lacks a name\nmust \xa0 \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0be\nthe same the same.', 'When I wash my face\nin the morning,\nI feel different.\nAs time passes the past\nbecomes obsolete.\nI am a new animal\nall the same\na hungry animal\nno, not the same at all\nbut an animal the same,\nthis changeling\nthis animal.', 'I have a body\nI like to rest against\nyours.\nI have a celestial body\nthat\nI am forced to share.\nAn atlas of the universe:\na celestial map\nhas two hemispheres.\nCan you imagine without\nplacing yourself at some\nCartesian coordinate\nor another?\nYou can forget\nwhere you are,\nbut never forget\nwhere you come from.', 'When I was born\nI was just another statistic.\nBefore I had a name\nI had a number.\nMy mattress had a number too,\nit was hidden on its\nunderbelly.\nI slept in comfort\nall the time knowing I could\ncount on\nmy old mattress.', 'I never enjoyed counting sheep\nwe are different animals\nwe are different numerals\nwe are separated\nby the fact that I have fingers\nand toes\nthe fact\nthat \xa0 \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0I can count\nthe fact \xa0 that\nI can speak\nmaybe you can speak?\nbut it is the language of\nthe cosmos and I am\na black hole.', 'We were written\nher and I wrote.', 'I knit her contently\nI knit her commonplace\nsee that window up there?\nI made it a picture\nand in it we framed our\nlives\nwhere the shadows strike\nthe wall and drip onto the\nfloor,\nwe were warm there once.\nI put it in a letter\nan envelope tied shut\nwith yarn.\nI knit her completely\nI knit her discretely\na cradle or a coffin?\nit’s just a place to\nstore our things.\nShe was tucked in neatly\nbetween a Tijuana catcall\nand my lust for the night\nher words\nare water drops\nin a vacant tub\nthey echo soft\nthe world’s thinnest drum.\nI knit her sublimely\nI knit her soulful', 'do you remember when we\nstitched our\nfingers and toes\ntogether?\nI still couldn’t swim\nand she\nshe hugged me dry.', '“Elaborate”\nsaid the colour to the\nmirror\n“What colour are you?”\nI ask.', 'Never repeat yourself to\nthe mirror\nthis mirror reflects\nonly shadows\nwet like the purple night', 'she tells me who\nI am\nmy reflection is\nher gaze', 'we laugh\nthrough eyelashes\nthick as\nforests', 'eyes just as brown\neyes just as green.', 'His arms folded like\norigami\npatient paper\ndissolving into wet\ncement\nwaiting, curled up\nlike a crooked fishhook\nagainst the wall\nof a building\nwhich defines the city\nwhich defies a country\nspitting Morse code into\nthe wind.', 'The street in front of me\nis being disembowelled,\nI feel its pain.', 'I am never late,\nbut today I am.', 'The waiting game is never\neasy for those who bore\nbanal as she waits\nmy bus passes by.', 'I write suffocate\nyou hold your breath\nI write mother\nyou hold her hand\nI write myself\nyou read me\nI write her\nshe is mine\nshe is yours\nthis page is a mirror\n“I am white” says the\nmirror\nthe words are me\ninside of you\na book and the cosmos\nletters burn incandescent\nstars\nin the startling realization\nthat\nwe are in this together\nI write warmth\nher embrace\nthe night wet and cold.', 'Button gone missing\nand into the fold\nwhere the accordions bellow\nbreathes an iron lung\ndecadent figures dance\nbetween shadows\nof stars.', 'Button gone missing\na matrix of\napology\nthe sun cathartic\nthe midday moon\nbutton of the sky.\nButton gone missing\nand into the fray\napologetic sky\nthe melody of noon\nwhere streets cracked\nlike elephant skin\ngreet the safety of\nour shoes\nand all while I am\nwith them I am\nmissing you.', 'I wrote her a beautiful bird\na sparrow\nborn of a gunshot wound\nthe same bird that\nrattled around\nmy ribcage\nblood red sparrow\nparade with the day\nwritten with red ribbon\na spoon in her nest\nsee that window up there?\nI made it a picture\nand in it\nshadows\nmirroring the mirage of life\nso pretty sewn into the\ndrapes\nso pretty where it becomes\ndifficult\nto\ndecipher\nwhere I begin\nand you end.', 'So pretty\nthe mirror that forgets\nour reflection\nso pretty the cause\npretty pretty pleased\npetty pestilence\nso pretty pendant\nbrass of bone skin\npretty picture\nwindow thief\nprettied up\nprying voyeur\ncold cuckold\nadrift with the snow\npillowed crystalline white\nso pretty the mirror\nthat reflects\nchildhood dreams\nso pretty analysis\npsycho or none-\nso pretty nun\nangelic soft\nbreast of\nmother\nso pretty word\nso pretty pretty\nso pretty kiss\nlip service\nfor the deaf\nso pretty sky\nopen to let\nus in.', 'Spectrum\nexpect ‘em\nspectrum\nexcept ‘em\nspectrum\nreject ‘em.\nask again\nrepeat\n“Silver! I am silver!”\nsays the mirror.', '“Lies! all lies!”\nscience replies.', 'I beat the drum\ninside my head\nswollen becomes the\nmembrane', 'crackling struck\nmirrored vagueness\nwhere obscurantists\ncannot be wrong', '“I am black”\nsays the mirror\n“wrong again”\nI say I say.', 'I bright the flame\ninside my liver\none drink\ntoo too many', 'I bright the light\nbehind the mirror\none switch\ntoo too many', '“I smell of whisky”\nsays the mirror\n“that smell is me”\nI say.', 'I beat the drum\ninside my head\nso pretty pulsing\nheartbeat in a skull', 'the sparrow spiralled\ncaught my eye\nsemitone eye\nsepia tone vision', '“I am brown”\nsays the mirror\n“you are not”\nI say.', 'I burn the night\nincandescent\nI burn the day\nsebutone', '“I have soft skin”\nsays the mirror\n“that is I”\nI say.', 'Hands who have\nforgotten the\npleasure of\nwork', 'eyes who have\nforgotten\nthat mirrors\nlie.', 'I asked myself:\n“what is the difference\nbetween idolatry and\nadultery?”', '“Everything” I said,\n“you either want to\nfuck a celebrity\nor be one”', 'placeless\nand placelessness\ncelebratory incest\nwe are the same\nthe mirror and I\nchanging positions\ninside out\noutside in\nwith my back to it\nthe mirror will make\nits faces\ncolourless portrait\nwe share this lie', 'the ambiguity of nature\nof the cosmos\nof our love\ninto the fold\nand into the fray.', '“I am grey”\nthe mirror says\n“you are not”\nI say.', 'Colourless foul thing\ncolour it whatever\ncolour it deceitful\ncolour it her pretty\ncolour it her gone\ncolour it you’re leaving\nbegun be gone\nbe gone begun\ncolour it memory\ndon’t forget to forget\ncolour it amnesia\nand stray from its eyes.', '“I am cold”\nthe mirror says\n“for once you are right”\nI say I say.'];
+    let current = 0;
+
+    function renderStanza() {
+      document.getElementById('stanzaBox').innerHTML = stanzas[current].replace(/\n/g, '<br>');
+      document.getElementById('pageIndicator').textContent = "Page " + (current + 1) + " of " + stanzas.length;
+    }
+
+    function nextStanza() {
+      if (current < stanzas.length - 1) {
+        current++;
+        renderStanza();
+      }
+    }
+
+    function prevStanza() {
+      if (current > 0) {
+        current--;
+        renderStanza();
+      }
+    }
+
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
+    }
+
+    function exitPage(event) {
+      event.stopPropagation();
+      window.location.href = "/";
+    }
+
+    function startBook() {
+      const mirror = document.getElementById('mirror');
+      mirror.classList.add('crack');
+      setTimeout(() => {
+        document.querySelector('.cover').style.display = 'none';
+        document.getElementById('reader').style.display = 'flex';
+        renderStanza();
+      }, 1200);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextStanza();
+      if (e.key === 'ArrowLeft') prevStanza();
+    });
+  </script>
+</body>
+</html>

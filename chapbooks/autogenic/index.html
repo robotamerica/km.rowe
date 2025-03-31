@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>caña y camarón – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body.blue-mode { color: #aaf0ff; }
+    body.green-mode { color: #9aff9a; }
+
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: currentColor black;
+    }
+    .book-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .book-box::-webkit-scrollbar-thumb {
+      background-color: currentColor;
+    }
+    .book-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .poem-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">
+
+        ⠀⠀⢀⣤⣶⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⢀⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠸⣿⣿⣿⣿⣿⡟⡟⡗⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠙⠏⠯⠛⣉⢲⣧⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠠⢭⣝⣾⠿⣴⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⢐⣺⡿⠁⠀⠈⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⣚⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀🤍⠀
+        ⢀⣿⣿⣿⣷⢒⣢⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣀⣄⣄
+        ⢰⣿⣿⡿⣿⣦⠬⢝⡄⠀⠀⠀⠀⠀⠀⢠⣿⠿⠿⠟⠛⠋⠁
+        ⠠⢿⣿⣷⠺⣿⣗⠒⠜⡄⠀⠀⠀⠀⣴⠟⠁⠀⠀⠀⠀⠀⠀
+        ⠀⣰⣿⣷⣍⡛⣯⣯⣙⡁⠀⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠨⢽⣿⣷⢍⣛⣶⢷⣼⣠⣾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠘⢿⣿⣖⠬⣹⣶⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠚⠿⠿⡒⠨⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠐⢒⣛⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⢘⣻⣭⣭⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⡰⢚⣺⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⢠⣿⣿⣿⣿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⢸⡿⢿⣿⢿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠄⠀⠘⡇⣸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⢀⠠⠀⠀⠸⣿⡿⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⡀⠄⠀⠠⢀⢿⡟⠀⡀⠀⡀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   
+</pre>
+    <h1>autogenic mapping & other transgressive cartographies</h1>
+    <h2>by kevin m rowe</h2>
+    <p><em>click to begin</em></p>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+  const stanzas = [
+  {
+    "title": "page 1",
+    "body": "the din of nature \nreminds me\nthat i am here\npoise yourself\nor so i am told\ntouching citrus \ndimpled skin\nbanking on \nmemory to \nlead me from \none body to \nthe next\u2014\ni am old \nas the word or \nas the books \nthat tumble \naround in my\nshaking life\ni am only\nas much as the \nwobbly memories\nthat have led\nme here\ni am a map with\nno lines\u2014i am\na broken flesh tone\ncompass\u2014a man or a\nstonework mannequin."
+  },
+  {
+    "title": "page 2",
+    "body": "we are just \nfleshy bodies \nwith hands\ndripping ripe\nwith cosmic\ntime\u2014and \nalthough we\n       are lost\nwe will find\nour way\u2014\nsightless &\nsenseless our\nfeet square \nagainst the \nuniverse\ndrifting slow\nin honeystuck\nsugar\u2014where \namber is the\nsound of an\nempty space\nwe unravel\nat breakneck \nspeeds\u2014darning\nthe holes we leave\nbehind with patterns\nof red & blue thread\nattached to me\u2014\nattached to you."
+  },
+  {
+    "title": "page 3",
+    "body": "i see you \nin me in you\nin the fuzzy\nglow of a \ncell phone\nscreen\u2014\nthis is just\na chapter \nin our novel\nwe have only\nmade notes for\ni can't say \ni know your\nphone number\n          by heart\nbut my \nfingertips\nwon't lie\n          don't lie\nbut the truth \nof the matter is\nwe are refrigerated\ncreatures creeping\nforward\u2014embedding\nourselves in each \nother\u2019s lives\nconstantly complaining\ntechnology\u2014we \ntend to forget our\ntouchy fleshy touchy bits."
+  },
+  {
+    "title": "page 4",
+    "body": "i made a map \nof the closet \nwe keep our \nbones in and\naged it twenty-three\nwe cut a library\nfrom popup books\npropped up\nlike a ship at sea\nand as we slept\nthe cosmos \npassed us\ndragged by \nunknown currents\nmeasured in \nsome form \nof wattage\nwe waddle\nour little \nselves deeper\nand deeper into\nthe void or \nup the walls\nwe let our \nart rot on and\nthat we \npainted so to \nkeep the \nattention of \nthe laziest of\nour friends."
+  },
+  {
+    "title": "page 5",
+    "body": "we call them\ndevices as if \nthey aren't \nattached to us\nand when \nthe batteries \nrun low we\ncartwheel \ncartographies \ncashing-in on \nclich\u00e9 and\nin this place\nof loosened \nand lucid \nmeaning\nwe give \ndirections \nin acronyms\nor novel anagrams\nnonmoral ravages\npoor mans\nportmanteaus\nto keep \nlittle pretty\nkitty on her \nitty-bitty\npaws gently\npawing at\nyour tippy-toes."
+  },
+  {
+    "title": "page 6",
+    "body": "folk play\nfor keeps\u2014\nthey say,\ni made this\ni own this\nit belongs \nto me\u2014en\nall i got is\na collection \nof rattletrap\nbones barely\nheld together\nwith tawdry\ntendons and\nkept in place\nneath frail flesh\necstatic younglings\nexporting exercise\nor exorcisms that\npromise personal\nproprietorship\nbut let's put pause\nto the myth\u2014\nyou're just\nborrowing \nthose molecules\nand those maps\nmade'a string \nerr bound to\nget ya lost."
+  },
+  {
+    "title": "page 7",
+    "body": "fine, you\ngot some \nbooks to\nset on fire\u2014\npaper pyrotechnics\n& i got my \nbuttless chapbooks\nto read naked\nafter fucking you\nbut geometry\nlooks different\nfrom the wrong\nangles\u2014where \nbooks are bricks\nto put through\nthe glass ceiling \nof capitalism\u2014\nbut we sell\nourselves limb\nby limb & we\nget lost in the \nlimbic cloud\nof emotions\nwhere we can\nno longer \ncontrol the body\ndictated poorly\na thalamussolini."
+  },
+  {
+    "title": "page 8",
+    "body": "map me \nmaybe on\ntuesday or\nwednesday \nor where we \nmake up \nthe middle\ni am fleshy\n         thing\ni am  shiny\n            bit\nof metal\u2014\nglint the sun\nchrysina aurigans\nscarab polymorph\nglint of light\nchirping the\nwave at 515\nnanometers \ni am golden\ncompass or \nthe bell of \na trumpet \nthat calls \nout again\nand again\nfollow me\nfollow me into\nfutures unknown."
+  },
+  {
+    "title": "page 9",
+    "body": "to break\nmy feet in\non your\ngrey ground\nhardened \nconcrete \ncrisscrossing\nyour america\nnot ours\nbut yours\u2014\nthe america\nof exclusion\nof tactless\ntheft and \nopen brazen\ndeath\u2014we\nare lost here\non a continent\nsized map\u2014\ncomposed of\ndangerous lines\nthat you call\nborders that \nmany cannot \ncross\u2014those\nwho bear the\nburden of your\nmisanthrope."
+  },
+  {
+    "title": "page 10",
+    "body": "we are \nsharp instruments\nwith mouths\nthat cut through\nthe silence\nof your trickery."
+  },
+  {
+    "title": "page 11",
+    "body": "we are \nchildren \nof cartography\ncollapsing in \nthe sun we \nfollowed \ninto this \ndesert of \ndestitution\nwe map our\nlosses as if\nthey treasure\ngeographic \ngrifters we \ntwist and we\ntwinkle unlawful\ndisplays & we \ntake we take \nwe take what\nwe can\u2014what\nwe are left with\nscraps just scraps."
+  },
+  {
+    "title": "page 12",
+    "body": "i was \nmixed by\nhand\u2014\nangle \ncorner\ncut and\nfold\u2014\nquantum \nas she does\nit bois\u2014\nwe call\nit home\nbut really\nwe don't\nknow where\nhome is\nunless\nthe cement\nfeels right\nor where\nthe window\nlets in \njust the \nright amount\nof light in\nand in\nbed where\nwe mix \nfluids or \njust sleep\nwe extend\nour jaws in\npreparation\nfor the\ncoming day."
+  },
+  {
+    "title": "page 13",
+    "body": "we found\na boat made\nof bones lost\non an eerie lake\ndon't lust for\nme\u2014and i won't\ntell the captain\u2014\nwe set forth\nregardless our\nnavigational \nineptitude\nsordid and\nsorry\u2014captain\nshows us his\nsqualor\u2014i am \nbroken here\nlost on this\nlake with no\nshores so show\nme something\ni haven't seen\nlike love or\nlovers quarrel\nbut keep it \nquiet or we \nwill have to \ntoss you \noverboard\u2014\nshow me scars\nor show me \nsympathy so \ni won't not\nforget."
+  },
+  {
+    "title": "page 14",
+    "body": "useless atlas\nnothing worth\nknowing can \nbe taught and how\ntawdry is forced\npedagogy\u2014despotic\nteachers\u2014pirate\nrealtors\u2014fucking\nhouse flippers\u2014we \nare ripe for loss\nso give us the \nwrong recipes\nand we will cook\nup something \nmediocre at best\ngentrified and petrified\nwe are the children\nof the children\nof the children\nof the lost generation\nand we ain't found\nourselves yet and\nwe usedacoulda\ncuddle with gals\nwith pierced noses\nand lips and call\nit an act of safe\nrevolution\u2014but \nteacher-preacher\nsays we ain't got\nno salvation."
+  },
+  {
+    "title": "page 15",
+    "body": "forget the mountains\nunless they keep the\nvalley safe and in these\ntimes of lightning n \nthunder we take \ncover in the uplifting\nfeatures of our\npersonal geography \ni wish i was a mole \nin the ground\u2014if i's\na mole in the ground\ni'd root that mountain\ndown and i'd wish\ni was a mole\nin the ground\ni ain't never been \nin the bin with \nrough n rowdy men\nbut if the chance \nshould come i'd \nhope you'd sing\nand sing me home\nor sing me away\nlet's burn these \nmaps of false \ntopography and \nhide in abandoned\nmines and tell folk \nto mine their own\nbusiness as we make \npublic displays of\nindecency"
+  },
+  {
+    "title": "page 16",
+    "body": "i was falling\nfrom your \nshores when \ni came around\nyou have me \ntangled and \ni couldn't \nfeel freer\u2014\non the other\nside of the \nriver\u2014a tree\ni felled and the\nshine of the \naxe i threw \nin the water\nturned into \nsteelhead trout \nwe put her on a leash\nand she leads us \nstraight to the \nsea\u2014the place \nwhere you thought\nyou lost me\u2014but \nwe were just \nplaying fish scale \ngames like tiny\ngems on the beach\ni cooked up some\nsteamed crab\u2014and \nwe embraced in the\nscent of her broth."
+  },
+  {
+    "title": "page 17",
+    "body": "three times\naround the \nmap you\ngifted me\u2014\nwhat colour \nis that\u2014\nyou ask of me\u2014\ni believe, but \ndon't quote \nme\u2014that\nis the colour \nof the softwater\nsea where the \nwind blows\ngently for \nyou and briskly\nfor me\ni drew some \nthings on my\nskin to help \nyou find your way \nand you trace\nthem with your\nfingers when you\nfeel we are in love\nscratching your\ninitials in\u2014like\nthe trunk of \na tree\u2014swing\nlow in the east\nor we gone to glory\nor just the west."
+  },
+  {
+    "title": "page 18",
+    "body": "folk memories\nfor when we \nfeeling down\u2014\nbroken cities \nwe left before \npins on a map\non the wall\nand we ask:\nis this what home\ncosts?\na bank and a job\nand i ain't much\na jobbin' man \nbut folk tell\nme i got a \ntalent for the word\nbut words \nought be free\u2014\nbesides i often\nfind myself lost\nin 'em or at a \nloss for them."
+  },
+  {
+    "title": "page 19",
+    "body": "the prettiest\ngal i ever did\nsee\u2014died a \nwhile from\nnow\u2014she weren't\ninternet pretty\nbut she held \nher own as \nlight filtered \nthrough dust\nand pine tree\nshe took my \nhand en sed \nfollow me."
+  },
+  {
+    "title": "page 20",
+    "body": "if there \nis a map \nfor it\u2014\nyou can\nbet that \nit was \nstolen."
+  },
+  {
+    "title": "page 21",
+    "body": "tucked in \nneat in the \nfat cheek swell\nof my mouth\nwe fill it with\nrainwater and\nwe drown in \nmy words\ni forgot the\ndirections you\ngave me in\nthe cacophony\nof my phoniness\n& i'd apologize,\nbut it should \nbe obvious that\ni am talking \nright this \ninstant\u2014an ego \nlost in his own \nthought\u2014thoroughly \ndescribing the \nplaces he has been\nas if it mattered."
+  },
+  {
+    "title": "page 22",
+    "body": "tickle me \ntenderly and \ntuck me in \nat night \nunder pink moon\na song and a\nsoft kiss\nbut here we are\nphonetically\nenergetic with \nno time for sleep\nwe tie ourselves \nto the new moon\nto the new day\nto a future\nwe drag \nourselves\ninto."
+  },
+  {
+    "title": "page 23",
+    "body": "stagger-lead\nand bring me \nforward\u2014\nwith or without\nyou\u2014young \ncartographer\u2014\nmaker of maps\n\u2014body is atlas\nand we draw\neach other naked\nin the bright\nlight of day\u2014\nhoney drop \nsun sticking \nto the floor\nkeeping our \nfeet warm\u2014we \nare connected\u2014\nwe are networked\nflesh\u2014bone\u2014lungs\u2014we are\nshimmering \nbodies putting the stars to shame\u2014\nproperly proletariat we map our little\nworlds\u2014in story\u2014in song\u2014in the ways\nwe love and \nthe ways we get \nalong\u2014along the \nway it's certain\nwe will get lost\nbecause an atlas\u2014a\nmap only shows \nus where we have\nbeen\u2014it won't tell\nus where we are\ngoing."
+  },
+  {
+    "title": "page 24",
+    "body": "invisible city press"
+  }
+];
+
+  let current = 0;
+  function renderStanza() {
+    const stanza = stanzas[current];
+    document.getElementById('stanzaBox').innerHTML =
+      `<span class="poem-title">${stanza.title}</span>` +
+      stanza.body.replace(/\n/g, '<br>');
+    document.getElementById('pageIndicator').textContent =
+      `Page ${current + 1} of ${stanzas.length}`;
+  }
+  function nextStanza() {
+    if (current < stanzas.length - 1) { current++; renderStanza(); }
+  }
+  function prevStanza() {
+    if (current > 0) { current--; renderStanza(); }
+  }
+  function toggleMode(event) {
+    event.stopPropagation();
+    const body = document.body;
+    const button = event.target;
+    if (body.classList.contains("blue-mode")) {
+      body.classList.remove("blue-mode");
+      body.classList.add("green-mode");
+      button.textContent = "blue mode";
+    } else {
+      body.classList.remove("green-mode");
+      body.classList.add("blue-mode");
+      button.textContent = "green mode";
+    }
+  }
+  function exitPage(event) {
+    event.stopPropagation();
+    window.location.href = "/";
+  }
+  function startBook() {
+    const mirror = document.getElementById('mirror');
+    mirror.classList.add('crack');
+    setTimeout(() => {
+      document.querySelector('.cover').style.display = 'none';
+      document.getElementById('reader').style.display = 'flex';
+      renderStanza();
+    }, 1200);
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') nextStanza();
+    if (e.key === 'ArrowLeft') prevStanza();
+  });
+  </script>
+</body>
+</html>
