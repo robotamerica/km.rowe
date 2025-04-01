@@ -8,86 +8,61 @@
   <style>
     .blog-layout {
       display: flex;
-      flex-wrap: wrap;
       gap: 2rem;
       padding: 2rem;
-    }.categories {
-  flex: 1 1 180px;
-}
-
-.categories ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.categories li {
-  margin-bottom: 0.5rem;
-}
-
-.categories a {
-  cursor: pointer;
-  display: block;
-}
-
-.posts {
-  flex: 3 1 600px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: flex-start;
-}
-
-.post-card {
-  background: black;
-  border: 2px solid currentColor;
-  padding: 1rem;
-  font-family: 'IBM Plex Mono', monospace;
-  width: 100%;
-  max-width: 300px;
-  box-sizing: border-box;
-  cursor: grab;
-  transition: transform 0.2s;
-}
-
-.post-card:hover {
-  transform: scale(1.02);
-}
-
-.post-card h3 {
-  margin-top: 0;
-}
-
-.post-card p {
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 768px) {
-  .blog-layout {
-    flex-direction: column;
-    padding: 1rem;
-  }
-
-  .categories {
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
-
-  .posts {
-    justify-content: center;
-  }
-
-  .post-card {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
+    }
+    .categories ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .categories li {
+      margin-bottom: 0.5rem;
+    }
+    .categories a {
+      cursor: pointer;
+      display: block;
+    }
+    .posts {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .post-card {
+      background: black;
+      border: 2px solid currentColor;
+      padding: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      width: 280px;
+      cursor: grab;
+      transition: transform 0.2s;
+    }
+    .post-card:hover {
+      transform: scale(1.02);
+    }
+    .post-card h3 {
+      margin-top: 0;
+    }
+    .post-card p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .hidden {
+      display: none !important;
+    }
+    @media screen and (max-width: 640px) {
+      .blog-layout {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      .posts {
+        justify-content: center;
+      }
+      .post-card {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body class="alt-mode">
