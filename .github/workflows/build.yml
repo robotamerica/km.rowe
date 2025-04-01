@@ -44,3 +44,4 @@ jobs:
           else
             git commit -m '🚀 Auto-generated blog update from GitHub Actions'
             git push origin HEAD
+          fi
