@@ -31,8 +31,13 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add posts/*.html posts/posts.json posts/*-*.html
-          git commit -m "🚀 Auto-generated blog update from GitHub Actions" || echo "No changes to commit"
-          git push
+          git add -A
+          if git diff-index --quiet HEAD; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "🚀 Auto-generated blog update from GitHub Actions"
+            git push
+          fi
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
