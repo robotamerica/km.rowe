@@ -37,7 +37,3 @@ jobs:
           else
             git commit -m "🚀 Auto-generated blog update from GitHub Actions"
             git push
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
