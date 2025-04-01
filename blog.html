@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>blog – km.rowe</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
@@ -10,6 +10,7 @@
       display: flex;
       gap: 2rem;
       padding: 2rem;
+      flex-wrap: wrap;
     }
     .categories ul {
       list-style: none;
@@ -21,6 +22,15 @@
     .categories a {
       cursor: pointer;
       display: block;
+    }
+    .categories select {
+      margin-top: 1rem;
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      background: black;
+      color: inherit;
+      border: 1px solid currentColor;
+      padding: 0.4rem;
     }
     .posts {
       flex: 1;
@@ -50,6 +60,19 @@
     .hidden {
       display: none !important;
     }
+    @media screen and (max-width: 640px) {
+      .blog-layout {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      .posts {
+        justify-content: center;
+      }
+      .post-card {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body class="alt-mode">
@@ -64,29 +87,31 @@
     </nav>
     <button class="toggle-mode" onclick="toggleCRT()" id="modeToggle">green mode</button>
   </header>
-
-  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>
-
-  <main class="blog-layout">
+  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>  <main class="blog-layout">
     <aside class="categories">
       <h2>categories</h2>
       <ul id="category-list"></ul>
+      <label for="sortSelect">sort by:</label>
+      <select id="sortSelect" onchange="sortPosts(this.value)">
+        <option value="desc">date ↓</option>
+        <option value="asc">date ↑</option>
+      </select>
     </aside>
     <section class="posts" id="post-grid"></section>
-  </main>
-
-  <script>
+  </main>  <script>
     let allPosts = [];
+    let currentSort = 'desc';
 
     async function loadPosts() {
       const res = await fetch('posts/posts.json');
       allPosts = await res.json();
+      sortAndRender(currentSort);
+      buildCategorySidebar();
+    }
 
-      allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+    function buildCategorySidebar() {
       const categories = Array.from(new Set(allPosts.map(p => p.category)));
       categories.sort();
-
       const catList = document.getElementById('category-list');
       catList.innerHTML = '';
 
@@ -99,8 +124,20 @@
         li.innerHTML = `<a onclick="filterPosts('${cat}')">${cat}</a>`;
         catList.appendChild(li);
       });
+    }
 
-      renderPosts(allPosts);
+    function sortAndRender(direction) {
+      currentSort = direction;
+      const sorted = [...allPosts].sort((a, b) => {
+        const da = new Date(a.date);
+        const db = new Date(b.date);
+        return direction === 'asc' ? da - db : db - da;
+      });
+      renderPosts(sorted);
+    }
+
+    function sortPosts(order) {
+      sortAndRender(order);
     }
 
     function renderPosts(posts) {
@@ -171,9 +208,7 @@
     }
 
     loadPosts();
-  </script>
-
-  <script>
+  </script>  <script>
     window.addEventListener('DOMContentLoaded', () => {
       const savedMode = localStorage.getItem('mode');
       const body = document.body;
@@ -218,6 +253,5 @@
     document.addEventListener('click', () => {
       playClickSound();
     });
-  </script>
-</body>
+  </script></body>
 </html>
