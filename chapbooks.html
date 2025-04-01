@@ -3,25 +3,30 @@
 
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<title>chapbooks – km.rowe</title>
-<link href="style.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>chapbooks – km.rowe</title>
+  <link href="style.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
     .chapbook-scroll {
       display: flex;
       overflow-x: auto;
-      gap: 2rem;
+      gap: 1rem;
       padding: 1rem 0;
       scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
     }
     .chapbook {
-      min-width: 300px;
-      max-width: 300px;
+      flex: 0 0 auto;
+      width: 300px;
+      max-width: 90vw;
       scroll-snap-align: start;
       border: 2px solid currentColor;
       padding: 1rem;
-      box-sizing: border-box;
       background: black;
       transition: transform 0.3s;
     }
@@ -44,6 +49,20 @@
     .chapbook-author {
       font-size: 0.9em;
       opacity: 0.75;
+    }
+
+    @media (max-width: 600px) {
+      .chapbook-scroll {
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+      .chapbook {
+        width: 90vw;
+        padding: 0.75rem;
+      }
+      .ascii-preview {
+        font-size: 8px;
+      }
     }
   </style>
 </head>
