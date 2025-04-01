@@ -27,6 +27,13 @@ jobs:
       - name: Build blog
         run: node scripts/build.mjs
 
+      - name: Show Git Status
+        run: |
+          echo "📦 Git status after build:"
+          git status
+          echo "📄 Git diff summary:"
+          git diff --stat || true
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions'
@@ -35,5 +42,5 @@ jobs:
           if git diff-index --quiet HEAD; then
             echo "✅ No changes to commit"
           else
-            git commit -m "🚀 Auto-generated blog update from GitHub Actions"
-            git push
+            git commit -m '🚀 Auto-generated blog update from GitHub Actions'
+            git push origin HEAD
