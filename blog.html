@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,21 +9,30 @@
   <style>
     .blog-layout {
       display: flex;
+      flex-wrap: wrap;
       gap: 2rem;
       padding: 2rem;
-      flex-wrap: wrap;
     }
+
+    .categories {
+      flex: 1 1 180px;
+    }
+
     .categories ul {
       list-style: none;
       padding-left: 0;
+      margin: 0;
     }
+
     .categories li {
       margin-bottom: 0.5rem;
     }
+
     .categories a {
       cursor: pointer;
       display: block;
     }
+
     .categories select {
       margin-top: 1rem;
       width: 100%;
@@ -32,46 +42,41 @@
       border: 1px solid currentColor;
       padding: 0.4rem;
     }
+
     .posts {
-      flex: 1;
-      display: flex;
-      flex-wrap: wrap;
+      flex: 3 1 600px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
+      width: 100%;
     }
+
     .post-card {
       background: black;
       border: 2px solid currentColor;
       padding: 1rem;
       font-family: 'IBM Plex Mono', monospace;
-      width: 280px;
       cursor: grab;
       transition: transform 0.2s;
+      width: 100%;
+      box-sizing: border-box;
     }
+
     .post-card:hover {
       transform: scale(1.02);
     }
+
     .post-card h3 {
       margin-top: 0;
     }
+
     .post-card p {
       font-size: 0.9rem;
       opacity: 0.85;
     }
+
     .hidden {
       display: none !important;
-    }
-    @media screen and (max-width: 640px) {
-      .blog-layout {
-        flex-direction: column;
-        padding: 1rem;
-      }
-      .posts {
-        justify-content: center;
-      }
-      .post-card {
-        width: 100%;
-        max-width: 100%;
-      }
     }
   </style>
 </head>
@@ -87,7 +92,10 @@
     </nav>
     <button class="toggle-mode" onclick="toggleCRT()" id="modeToggle">green mode</button>
   </header>
-  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>  <main class="blog-layout">
+
+  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>
+
+  <main class="blog-layout">
     <aside class="categories">
       <h2>categories</h2>
       <ul id="category-list"></ul>
@@ -98,7 +106,9 @@
       </select>
     </aside>
     <section class="posts" id="post-grid"></section>
-  </main>  <script>
+  </main>
+
+  <script>
     let allPosts = [];
     let currentSort = 'desc';
 
@@ -208,7 +218,9 @@
     }
 
     loadPosts();
-  </script>  <script>
+  </script>
+
+  <script>
     window.addEventListener('DOMContentLoaded', () => {
       const savedMode = localStorage.getItem('mode');
       const body = document.body;
@@ -253,5 +265,6 @@
     document.addEventListener('click', () => {
       playClickSound();
     });
-  </script></body>
+  </script>
+</body>
 </html>
