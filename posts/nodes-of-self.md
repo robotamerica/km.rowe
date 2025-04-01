@@ -1,13 +1,7 @@
 ---
 title: Nodes of Self
-date: '2025-03-18'
-category: fragments
+date: 2025-03-18
+category: technology
 description: Reflections scattered across coordinates.
 ---
-
-We are coordinates.
-
-Tracked, pinned, and rendered—  
-But also scattered, incomplete, fragmented.
-
-Each post, each point—an echo.
+space holder
