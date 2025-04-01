@@ -6,6 +6,7 @@ on:
       - 'posts/**/*.md'
       - 'scripts/build.mjs'
       - '.github/workflows/build.yml'
+  workflow_dispatch:  # Manual trigger via GitHub UI
 
 jobs:
   build-blog:
@@ -31,7 +32,7 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add posts/*.html posts/posts.json posts/*-*.html
-          git commit -m \"🚀 Auto-generated blog update from GitHub Actions\" || echo \"No changes to commit\"
+          git commit -m "🚀 Auto-generated blog update from GitHub Actions" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
