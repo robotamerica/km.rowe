@@ -1,42 +1,49 @@
 [
   {
+    "title": "trust issues in poetry",
+    "date": "2025-04-02T00:00:00.000Z",
+    "category": "general",
+    "description": "how should we trust a poet?",
+    "file": "trust issues in poetry.md"
+  },
+  {
     "title": "Cartography of Absence",
-    "date": "2025-03-30",
+    "date": "2025-03-30T00:00:00.000Z",
     "category": "mapping",
     "description": "Drawing invisible geographies of loss and longing.",
     "file": "cartography-of-absence.md"
   },
   {
     "title": "Signal Decay",
-    "date": "2025-03-30",
+    "date": "2025-03-30T00:00:00.000Z",
     "category": "technology",
     "description": "On transmitting memory across distance and dust.",
     "file": "signal-decay.md"
   },
   {
     "title": "Pixel Memories",
-    "date": "2025-03-29",
+    "date": "2025-03-29T00:00:00.000Z",
     "category": "technology",
     "description": "Fragments of emotion encoded in CRT phosphor.",
     "file": "pixel-memories.md"
   },
   {
     "title": "Hello World",
-    "date": "2025-03-28",
+    "date": "2025-03-28T00:00:00.000Z",
     "category": "general",
     "description": "Welcome post on the poetic mapping of the word.",
     "file": "hello-world.md"
   },
   {
     "title": "Geohaiku",
-    "date": "2025-03-30",
+    "date": "2025-03-20",
     "category": "poetics",
     "description": "Haikus mapped onto digital terrain.",
     "file": "geohaiku.md"
   },
   {
     "title": "Nodes of Self",
-    "date": "2025-03-30",
+    "date": "2025-03-18T00:00:00.000Z",
     "category": "technology",
     "description": "Reflections scattered across coordinates.",
     "file": "nodes-of-self.md"
