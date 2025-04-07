@@ -61,7 +61,7 @@
     #poem-container {
       display: none;
       height: 100vh;
-      overflow-y: scroll;
+      overflow-y: auto;
       padding: 2rem;
       box-sizing: border-box;
       scroll-behavior: smooth;
@@ -83,30 +83,24 @@
   </div>
 
   <div class="cover" onclick="showPoem()">
-    <pre>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⣤⡀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣤⡞⢦⢦⢲⡜⢯⢦⢳⠣⢹⠿⠽⣷⡿⠁
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⣷⠘⡜⣄⡗⡾⡍⣄⡎⢆⡿⠁⣾⡿⠁⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡟⢦⢳⠳⡸⣼⢳⠙⡸⡉⡼⠇⣾⡿⠁⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⡟⢡⣇⢳⣱⢏⢧⢳⠳⣩⡏⢼⣿⠁⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡿⠜⡜⣌⢦⣏⠎⣄⣮⢒⡗⣼⣿⠃⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⢿⡑⡼⡜⡜⡾⡼⡙⣜⢤⡛⣱⣿⠃⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⡿⡱⡼⡑⣼⡹⠧⡓⡝⢌⡮⣹⣿⠃⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⡑⡼⣕⡽⣎⡷⣓⡝⣭⡺⣰⣿⠇⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⢟⢐⢞⣍⡞⣖⣓⣜⠞⣤⡞⢱⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⣿⡿⡩⣪⡪⣚⢯⡳⢝⢍⠭⣤⠟⢡⣾⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡾⠟⣉⠴⠋⡢⡞⣣⡞⡽⠎⢱⢔⣑⡼⣉⣴⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⣴⣷⣤⣰⣆⣤⣠⠠⠄⡴⡾⣿⣽⣖⣫⢣⡜⣩⣸⠖⣧⡛⡕⣜⡥⢖⣭⣾⢿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠈⠉⠛⠿⣿⣿⣿⣿⡿⠶⠿⢾⣥⣸⣸⣧⣹⣷⣏⣛⠮⠼⠓⣩⣴⡿⠟⢁⣾⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠉⠙⠻⠿⣷⣶⣤⣀⣼⣿⠹⢿⣿⣿⣷⣶⣶⣾⠿⠋⠀⠀⣼⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⣿⣿⣷⣦⣤⣈⠉⠻⣿⢿⣿⣶⣤⣀⣼⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼⣰⢞⣿⣡⣀⣉⠙⠻⣿⣶⣦⣦⣨⣝⣛⣿⣿⣷⣦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⠀⢙⣪⣟⣚⢣⠯⡝⣭⣿⡿⢿⣿⣿⠟⠛⠻⠿⣿⣿⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣿⣷⡿⠟⠛⠉⠀⠀⠀⠉⠐⠙⠓⣿⣛⣼⠃⠀⠀⠀⠀⣀⣽⣿⡿⣿⣿⣿⣿⣂⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠘⣧⡟⢉⠀⢀⠀⠐⠀⠉⠀⠀⠀⠀⠀⡠⣿⡟⠀⠀⣠⣤⣾⣿⠟⠋⠁⠀⠀⠈⠙⠻⠟⠁⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣤⣾⡿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣽⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠁⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-  
+    <pre>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠿⡰⢤⡚⡶⢤⠓⣹⠯⣷⡟
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⢢⡱⢦⡟⠳⣌⢳⠇⣼⡟⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣙⠦⢱⣳⣋⠳⣌⠟⣰⡟⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠦⡜⢢⣛⡶⢌⠓⡮⣽⡟⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⢯⡱⢍⢧⡻⣐⠮⢽⣡⡿⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⠋⡲⢍⠾⡼⣑⠮⣩⣳⡿⠁⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡿⣋⣽⢭⢯⣫⢵⢫⡽⢳⣿⠁⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡶⣿⢿⢑⡯⣫⢞⣜⠭⢪⡜⢁⣾⡿⠀⠀⠀⠀⠀⠀
+      ⢀⡄⠀⣀⠀⠀⠀⢀⣤⡶⣟⠭⢲⡡⢳⣫⠺⣼⠊⢰⡾⣫⣾⣿⠏⠀⠀⠀⠀⠀⠀⠀
+      ⠘⠻⠿⣷⣿⣶⡦⢭⣭⣍⣹⣼⢑⣧⣟⣲⡳⠯⣓⣵⡿⢋⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠉⠛⠻⢷⣦⣄⣸⡿⠻⣿⣿⣷⣶⣶⠟⠁⠀⣾⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⢈⣽⡟⠿⢶⣤⣌⡛⠛⠿⣷⣦⣼⣟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠙⢫⡼⠞⢖⡦⡎⢿⠿⣻⣾⣷⢾⡿⠿⣿⣶⣦⣄⡀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⢀⣤⣿⡶⠟⠛⠉⠀⠁⠉⠛⠙⣾⣯⠇⠀⠀⠀⣉⣽⣿⢿⣿⣶⣆⡀
+      ⠀⠀⠀⠀⠀⠀⢛⡟⠁⠀⠄⠀⠈⠀⠀⠀⠀⢰⣿⠁⣀⣤⣶⠿⠛⠉⠀⠀⠈⠉⠛⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣷⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       <h1>poem[oṃ]oem[poem]</h1>
       by kevin m rowe
 
@@ -609,54 +603,54 @@
       sing the day is done.
     </div>
   </div>
- <script>
-  let scrollInterval;
-  let isPaused = false;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    // Hook up toolbar buttons after DOM is ready
-    document.querySelector('.cover').addEventListener('click', showPoem);
-    document.getElementById('pauseBtn').addEventListener('click', toggleScroll);
-  });
-
-  function showPoem() {
-    document.querySelector('.cover').style.display = 'none';
-    document.getElementById('poem-container').style.display = 'block';
-    document.getElementById('pauseBtn').style.display = 'inline-block';
-    startScroll();
-  }
-
-  function startScroll() {
-    const container = document.getElementById('poem-container');
-    scrollInterval = setInterval(() => {
-      if (!isPaused) {
-        container.scrollTop += 0.3;
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let scrollInterval;
+      let isPaused = false;
+    
+      function showPoem() {
+        document.querySelector('.cover').style.display = 'none';
+        const container = document.getElementById('poem-container');
+        container.style.display = 'block';
+        document.getElementById('pauseBtn').style.display = 'inline-block';
+        startScroll();
       }
-    }, 10);
-  }
-
-  function toggleScroll() {
-    isPaused = !isPaused;
-    document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
-  }
-
-  function toggleMode(event) {
-    const body = document.body;
-    if (body.classList.contains('green-mode')) {
-      body.classList.remove('green-mode');
-      body.classList.add('blue-mode');
-      event.target.textContent = 'green mode';
-    } else {
-      body.classList.remove('blue-mode');
-      body.classList.add('green-mode');
-      event.target.textContent = 'blue mode';
-    }
-  }
-
-  function exitPage(event) {
-    window.location.href = 'index.html';
-  }
-</script>
+    
+      function startScroll() {
+        const container = document.getElementById('poem-container');
+        scrollInterval = setInterval(() => {
+          if (!isPaused) container.scrollTop += 0.3;
+        }, 10);
+      }
+    
+      function toggleScroll() {
+        isPaused = !isPaused;
+        document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
+      }
+    
+      function toggleMode(event) {
+        const body = document.body;
+        if (body.classList.contains('green-mode')) {
+          body.classList.remove('green-mode');
+          body.classList.add('blue-mode');
+          event.target.textContent = 'green mode';
+        } else {
+          body.classList.remove('blue-mode');
+          body.classList.add('green-mode');
+          event.target.textContent = 'blue mode';
+        }
+      }
+    
+      function exitPage() {
+        window.location.href = '/index.html'; 
+      }
+    
+      window.showPoem = showPoem;
+      window.toggleScroll = toggleScroll;
+      window.toggleMode = toggleMode;
+      window.exitPage = exitPage;
+    });
+    </script>    
 </body>
 </html>
-
