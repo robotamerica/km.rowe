@@ -609,49 +609,54 @@
       sing the day is done.
     </div>
   </div>
+ <script>
+  let scrollInterval;
+  let isPaused = false;
 
-  <script>
-    let scrollInterval;
-    let isPaused = false;
+  document.addEventListener('DOMContentLoaded', () => {
+    // Hook up toolbar buttons after DOM is ready
+    document.querySelector('.cover').addEventListener('click', showPoem);
+    document.getElementById('pauseBtn').addEventListener('click', toggleScroll);
+  });
 
-    function showPoem() {
-      document.querySelector('.cover').style.display = 'none';
-      document.getElementById('poem-container').style.display = 'block';
-      document.getElementById('pauseBtn').style.display = 'inline-block';
-      startScroll();
-    }
+  function showPoem() {
+    document.querySelector('.cover').style.display = 'none';
+    document.getElementById('poem-container').style.display = 'block';
+    document.getElementById('pauseBtn').style.display = 'inline-block';
+    startScroll();
+  }
 
-    function startScroll() {
-      const container = document.getElementById('poem-container');
-      scrollInterval = setInterval(() => {
-        if (!isPaused) {
-          container.scrollTop += 0.3;
-        }
-      }, 10);
-    }
-
-    function toggleScroll() {
-      isPaused = !isPaused;
-      document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
-    }
-
-    function toggleMode(event) {
-      const body = document.body;
-      if (body.classList.contains('green-mode')) {
-        body.classList.remove('green-mode');
-        body.classList.add('blue-mode');
-        event.target.textContent = 'green mode';
-      } else {
-        body.classList.remove('blue-mode');
-        body.classList.add('green-mode');
-        event.target.textContent = 'blue mode';
+  function startScroll() {
+    const container = document.getElementById('poem-container');
+    scrollInterval = setInterval(() => {
+      if (!isPaused) {
+        container.scrollTop += 0.3;
       }
-    }
+    }, 10);
+  }
 
-    function exitPage(event) {
-      window.location.href = 'index.html';
+  function toggleScroll() {
+    isPaused = !isPaused;
+    document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
+  }
+
+  function toggleMode(event) {
+    const body = document.body;
+    if (body.classList.contains('green-mode')) {
+      body.classList.remove('green-mode');
+      body.classList.add('blue-mode');
+      event.target.textContent = 'green mode';
+    } else {
+      body.classList.remove('blue-mode');
+      body.classList.add('green-mode');
+      event.target.textContent = 'blue mode';
     }
-  </script>
+  }
+
+  function exitPage(event) {
+    window.location.href = 'index.html';
+  }
+</script>
 </body>
 </html>
 
