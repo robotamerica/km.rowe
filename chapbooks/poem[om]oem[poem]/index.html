@@ -12,11 +12,8 @@
       font-family: 'VT323', monospace;
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: auto;
+      overflow: hidden;
     }
-    body.green-mode { color: #9aff9a; }
-
     .toolbar {
       position: fixed;
       top: 10px;
@@ -34,6 +31,8 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    .blue-mode { color: #aaf0ff; }
+    .green-mode { color: #9aff9a; }
     .cover {
       position: fixed;
       inset: 0;
@@ -54,36 +53,69 @@
       line-height: 1.2;
       padding: 0 10px;
     }
-    @keyframes pulse {
-      from { opacity: 0.6; }
-      to { opacity: 1; }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
     }
-    #poem-container {
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    .container {
       display: none;
-      height: 100vh;
-      overflow-y: auto;
-      padding: 2rem;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
       box-sizing: border-box;
-      scroll-behavior: smooth;
+      justify-content: flex-start;
     }
-    #poem {
-      white-space: pre-wrap;
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 700px;
-      margin: auto;
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+    }
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    @media screen and (max-width: 600px) {
+      .toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+        top: 5px;
+        right: 5px;
+      }
+      .book-box {
+        height: 50vh;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body class="blue-mode">
   <div class="toolbar">
     <button class="button" onclick="toggleMode(event)">green mode</button>
-    <button class="button" onclick="toggleScroll()" id="pauseBtn" style="display: none;">pause</button>
     <button class="button" onclick="exitPage(event)">exit</button>
   </div>
 
-  <div class="cover" onclick="showPoem()">
-    <pre>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠿⡰⢤⡚⡶⢤⠓⣹⠯⣷⡟
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⢢⡱⢦⡟⠳⣌⢳⠇⣼⡟⠀
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣙⠦⢱⣳⣋⠳⣌⠟⣰⡟⠀⠀
@@ -101,556 +133,82 @@
       ⠀⠀⠀⠀⠀⠀⢛⡟⠁⠀⠄⠀⠈⠀⠀⠀⠀⢰⣿⠁⣀⣤⣶⠿⠛⠉⠀⠀⠈⠉⠛⠀
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣷⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-      <h1>poem[oṃ]oem[poem]</h1>
-      by kevin m rowe
 
-  <em>click to begin</em>
+poem[oṃ]oem[poem]
+by kevin m rowe
+
+<em>click the umbrella to begin</em>
     </pre>
   </div>
 
-  <div id="poem-container">
-    <div id="poem">
-      poem[oṃ]oem[poem]
-
-      if there is water
-      there is beach
-      if there is sky
-      and ground
-      or sea and sun 
-      there is horizon
-      if there are mountains
-      they like little broccoli heads
-      if there are antenna
-      then invisible communication
-      all about and abound 
-      
-      if there is sand 
-      then sand goes in shoe
-      or between pages of book
-      or spit goes the oyster
-      in pearl glow of day
-      
-      if there are blackbirds
-      crackle and caw 
-      
-      if the current is wet
-      then take us away
-      
-      first past the post
-      lagoon or emerald coast
-      we wade wisely in the shallows
-      
-      if there is tree
-      then shade
-      
-      if there are trees 
-      then shapes like combs
-      or paint brushes 
-      
-      if there is wind 
-      catch me here or there
-      
-      if there is beer
-      several limes halved and squeezed
-      
-      it there are glasses 
-      please let me read
-      
-      if there is language
-      english or spanish
-      let me imagine words 
-      and words to describe
-      subaquatic says nature
-      squiggly or squirmy things
-      silver and scaly things
-      
-      bubbles
-      darkness
-      brightness
-      blue 
-      blue-green
-      nameless shades
-      all liquid skin
-      and mysterious
-      
-      if there are waves
-      constant sound 
-      somewhere between
-      wind and water
-      somewhere between
-      old television at midnight
-      or smartphone fuzz
-      all intelligent—we think
-      all crafty creatures—we believe
-      but brimming with bottomless ego
-      we wrong we wrong 
-      
-      if weather
-      let there be saint of climate
-      with chefs dying in this heat 
-      too hot in the kitchen
-      killing themselves for capital
-      
-      if bones
-      unearth them as fossils
-      it be nicer that way
-      
-      if smiles
-      not a dentist ad
-      but gappy happy
-      yellow teeth
-      
-      left the toothbrush at home
-      left the cat alone 
-      left the plants unwatered—
-      let there be rain
-      
-      let there be children smarter than we
-      let there be animals we dare not eat
-      let there be bread
-      when you let us eat cake
-      let there be leftovers
-      wrapped on tinfoil or plastic wrap
-      let there be bottles and fill them with wine
-      
-      if pure sun
-      then maybe we will burn
-      
-      if salsa picante
-      please up the ante
-      
-      if red brick on shore
-      please build some more
-      
-      if there are buses
-      tourists and plastic
-      if there is palm
-      cocoloco and fantastic
-      
-      if there is day
-      let there be night
-      but little binaries
-      leave us too tight
-      
-      we are water
-      and skin
-      and hair
-      and teeth
-      too many holes
-      not to sink
-      barely aquatic
-      beach bums 
-      itchy sandfleas 
-      trying to escape 
-      islands
-      islands
-      islands 
-      oh boey
-      or old bodies
-      we march 
-      in the blameless heat
-      
-      if hangnail
-      likely pain
-      if astral awareness
-      stargaze guide 
-      if red table
-      don't say coca
-      if there is noon
-      there is somewhere after
-      
-      splendid swimmer
-      or fisherman
-      blue web of net 
-      late for lagoon
-      crabs crafting burrows
-      but bird builds a nest 
-      not nobody nowhere
-      except all here and now
-      on big blue marble
-      moaning better beat the heat
-      
-      riptide en let it slide
-      just let her take you
-      and swim to the side
-      foam and fuzz
-      and salty spray
-      legs burn
-      lungs burn
-      mouth full of saltwater
-      skin stings 
-      muscles tight
-      ears ring
-      vibrating on shore with
-      near death kissy kisses
-      everything shines
-      everything sings
-      
-      but nothing makes one question mortality
-      like an unstable chair
-      from six legs to none 
-      better buy me a saint
-      saint salt 
-      saint sun
-      or sand 
-      saint sea
-      or applaud the appalling apostle
-      apiary honey sucked starlight
-      dripping red from
-      blue blue sky
-      but science lies as much as
-      religion or poetry 
-      depending on how you write it
-      depending on how you read it
-      
-      echo me ecology
-      or empty me emberto 
-      dense attire written to wear
-      rather than to be 
-      a possibility
-      i am wrong 
-      but why you so pretty?
-      
-      if you don't adore the letter q
-      then who the fuck are you?
-      
-      if question
-      maybe answer
-      or big kiss on mouth 
-      or constant consent
-      or face the consequence
-      
-      we can wash yesterday off
-      but what of tomorrow
-      
-      if possibility
-      be aggressive
-      bee-ee-agressive 
-      
-      if want none
-      wonton soup and some 
-      
-      i am windbent
-      whiplash and whipperwheel
-      tone or tone-deaf
-      pour a lil on the tombstone
-      talk to me toothsayer
-      on toffee thick tuesday
-      tantamount to humidity
-      which is very far from humility
-      
-      sweet or saltwater
-      a sweaty little story 
-      water or animalcræft
-      hands for pincers 
-      walk a little sideways
-      snore when we drunk
-      
-      if there be floss
-      let it be candy
-      let it be blue
-      or pink
-      the colour of sky
-      depending on what time it is
-      
-      we are lavender and lily
-      worm or beechwood
-      i am not known for
-      the number of fingers
-      or toes i possess
-      but maybe i should be
-      
-      maybe i talk too much
-      when i should listen
-      
-      maybe my shoulder is
-      sore with age
-      
-      but if sandles 
-      don't let me be toeless
-      
-      shade is important
-      mostly when you need it
-      
-      we got ice
-      all sorts of ice
-      so long as it's cubed
-      
-      don't be fooled
-      by these rocks i got
-      i'm still kevvy from the block
-      
-      kevvy metal and other lead boots
-      
-      if tomorrow
-      then it's today
-      
-      if today
-      it's no longer yesterday
-      
-      left money in my pocket before laundry
-      i'm that kind of forgetful
-      
-      part with me palapa
-      purpose like paella 
-      and pass the feelings by
-      
-      if prairie rose 
-      then show me your hips
-      built bravely we machines
-      like tractor
-      like four by four
-      shuck me an oyster
-      or hock me a chuckwagon
-      
-      but we are near sea
-      and somehow always above it
-      
-      cause & effect is a crocodile
-      or a clock gone tick-tock
-      but now we got them phones
-      smart silent killers 
-      like shark
-      like disease
-      
-      gertrude stein
-      or seinfeld
-      got yer costanzas
-      in meditation
-      
-      coral or correlate
-      or collate the conditions
-      think of all the wonderful
-      ways we anthropomorphise
-      the incredible crustaceans
-      or just make them edible
-      
-      if there is bait
-      there is fishing
-      tackle and gear me
-      or reel me in
-      closer to shore
-      to perceive the pelican
-      brief as she dives
-      better at fishing
-      than we are 
-      efficient & effective
-      imitate and intonate
-      we've learned everything
-      from natural nature
-      
-      give me a hand
-      clap hands 
-      hand me a beer
-      handifolk on vacation
-      
-      i wrote but i can't poet
-      
-      proper poets
-      teach at universities
-      and have fancy degrees
-      or host boring podcasts
-      or have editors and publishers
-      
-      proper poets
-      don't eat fast food
-      
-      proper poets
-      probably don't eat tacos
-      because proper poets 
-      got class and grammar
-      
-      proper poets 
-      all got that same voice
-      where did that come from?
-      
-      proper poetry
-      is theft and don't
-      dare tell me otherwise
-      
-      proper poets 
-      burn at the beach
-      lobsters at the boil
-      
-      no proper poetry here
-      or maybe, but that's contestable
-      
-      breakwater and levy it fast
-      
-      i am approximately
-      75,000 enzymes strong 
-      with a set of rattling teeth
-      hungry for seafood
-      
-      came across 
-      beach side conversation
-      about lorca:
-      proper poets got good teeth
-      oral hygiene is important
-      lorca had too many cavities
-      teeth not white enough
-      that's why the facsists killed him
-      
-      maybe we better as 
-      spaghetti western?
-      maybe if we wander less
-      and wonder more ...
-      
-      wick a wish a candlestick
-      and pass me the tv dinner
-      
-      if sandcastle
-      studies architecture
-      
-      if young
-      smart
-      animalwise
-      prime 
-      a proper
-      home 
-      
-      if Instagram
-      then barely living
-      
-      two thumbs
-      to keep the score
-      
-      if green
-      i'd rather not kale
-      kelp it together kevin
-      
-      if beach not enough
-      drive to the mountains
-      purify me pine
-      just don't enable me
-      
-      pry me another hour
-      with the crowbar of today
-      and just like little fishies
-      i'll swim to swim away.
-      
-      poempoem or pom pom
-      almost baby after prom prom
-      
-      all alberta boi
-      or alpha centauri 
-      triple eh beef
-      ground or chuck round
-      i am impossible in too many ways
-      
-      i'm feeling driftwood
-      stranded on beach
-      or all log driver's waltz
-      
-      or just fresh cut pine
-      gone birling down
-      en down whitewater
-      or just stepping lightly
-      
-      well opine the pinebeatle 
-      in ten words or less
-      i double dare you
-      
-      please me prairie
-      or leave me on the lark
-      celebrate the cephalopods
-      or give em the goat
-      
-      we are a few tentacles 
-      short of a rodeo 
-      but we here anyway
-      
-      under sun
-      in warm water
-      lazy lagoon
-      gusty gulf
-      low tide
-      and bona fide
-      
-      if not veracruz
-      then where?
-      
-      happy in xalapa
-      and fuck new york
-      poets anyway 
-      
-      orchid or are you kidding me
-      i've bloomed in much harsher places
-      
-      she be cut so
-      stitch her with literature
-      and pack my mouth with poems
-      
-      i am a catalogue of worn parts
-      
-      only mobile cause i can be
-      and there is my privilege
-      and it disgusts me
-      
-      sugerchide and gest me
-      palm—cane—coconut
-      all caffeine and sangre
-      we are only old as the
-      last story told
-      
-      and at this moment
-      none short nor tall
-      nope i've none left for y'all
-      
-      but if a single cloud
-      then sing the moon to come
-      sing sweet lil birdie
-      sing the day is done.
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
     </div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let scrollInterval;
-      let isPaused = false;
-    
-      function showPoem() {
+    const stanzas = ["poem[o\u1e43]oem[poem]", "if there is water\nthere is beach\nif there is sky\nand ground\nor sea and sun \nthere is horizon\nif there are mountains\nthey like little broccoli heads\nif there are antenna\nthen invisible communication\nall about and abound ", "if there is sand \nthen sand goes in shoe\nor between pages of book\nor spit goes the oyster\nin pearl glow of day", "if there are blackbirds\ncrackle and caw ", "if the current is wet\nthen take us away", "first past the post\nlagoon or emerald coast\nwe wade wisely in the shallows", "if there is tree\nthen shade", "if there are trees \nthen shapes like combs\nor paint brushes ", "if there is wind \ncatch me here or there", "if there is beer\nseveral limes halved and squeezed", "it there are glasses \nplease let me read", "if there is language\nenglish or spanish\nlet me imagine words \nand words to describe\nsubaquatic says nature\nsquiggly or squirmy things\nsilver and scaly things", "bubbles\ndarkness\nbrightness\nblue \nblue-green\nnameless shades\nall liquid skin\nand mysterious", "if there are waves\nconstant sound \nsomewhere between\nwind and water\nsomewhere between\nold television at midnight\nor smartphone fuzz\nall intelligent\u2014we think\nall crafty creatures\u2014we believe\nbut brimming with bottomless ego\nwe wrong we wrong ", "if weather\nlet there be saint of climate\nwith chefs dying in this heat \ntoo hot in the kitchen\nkilling themselves for capital", "if bones\nunearth them as fossils\nit be nicer that way", "if smiles\nnot a dentist ad\nbut gappy happy\nyellow teeth", "left the toothbrush at home\nleft the cat alone \nleft the plants unwatered\u2014\nlet there be rain", "let there be children smarter than we\nlet there be animals we dare not eat\nlet there be bread\nwhen you let us eat cake\nlet there be leftovers\nwrapped on tinfoil or plastic wrap\nlet there be bottles and fill them with wine", "if pure sun\nthen maybe we will burn", "if salsa picante\nplease up the ante", "if red brick on shore\nplease build some more", "if there are buses\ntourists and plastic\nif there is palm\ncocoloco and fantastic", "if there is day\nlet there be night\nbut little binaries\nleave us too tight", "we are water\nand skin\nand hair\nand teeth\ntoo many holes\nnot to sink\nbarely aquatic\nbeach bums \nitchy sandfleas \ntrying to escape \nislands\nislands\nislands \noh boey\nor old bodies\nwe march \nin the blameless heat", "if hangnail\nlikely pain\nif astral awareness\nstargaze guide \nif red table\ndon't say coca\nif there is noon\nthere is somewhere after", "splendid swimmer\nor fisherman\nblue web of net \nlate for lagoon\ncrabs crafting burrows\nbut bird builds a nest \nnot nobody nowhere\nexcept all here and now\non big blue marble\nmoaning better beat the heat", "riptide en let it slide\njust let her take you\nand swim to the side\nfoam and fuzz\nand salty spray\nlegs burn\nlungs burn\nmouth full of saltwater\nskin stings \nmuscles tight\nears ring\nvibrating on shore with\nnear death kissy kisses\neverything shines\neverything sings", "but nothing makes one question mortality\nlike an unstable chair\nfrom six legs to none \nbetter buy me a saint\nsaint salt \nsaint sun\nor sand \nsaint sea\nor applaud the appalling apostle\napiary honey sucked starlight\ndripping red from\nblue blue sky\nbut science lies as much as\nreligion or poetry \ndepending on how you write it\ndepending on how you read it", "echo me ecology\nor empty me emberto \ndense attire written to wear\nrather than to be \na possibility\ni am wrong \nbut why you so pretty?", "if you don't adore the letter q\nthen who the fuck are you?", "if question\nmaybe answer\nor big kiss on mouth \nor constant consent\nor face the consequence", "we can wash yesterday off\nbut what of tomorrow", "if possibility\nbe aggressive\nbee-ee-agressive ", "if want none\nwonton soup and some ", "i am windbent\nwhiplash and whipperwheel\ntone or tone-deaf\npour a lil on the tombstone\ntalk to me toothsayer\non toffee thick tuesday\ntantamount to humidity\nwhich is very far from humility", "sweet or saltwater\na sweaty little story \nwater or animalcr\u00e6ft\nhands for pincers \nwalk a little sideways\nsnore when we drunk", "if there be floss\nlet it be candy\nlet it be blue\nor pink\nthe colour of sky\ndepending on what time it is", "we are lavender and lily\nworm or beechwood\ni am not known for\nthe number of fingers\nor toes i possess\nbut maybe i should be", "maybe i talk too much\nwhen i should listen", "maybe my shoulder is\nsore with age", "but if sandles \ndon't let me be toeless", "shade is important\nmostly when you need it", "we got ice\nall sorts of ice\nso long as it's cubed", "don't be fooled\nby these rocks i got\ni'm still kevvy from the block", "kevvy metal and other lead boots", "if tomorrow\nthen it's today", "if today\nit's no longer yesterday", "left money in my pocket before laundry\ni'm that kind of forgetful", "part with me palapa\npurpose like paella \nand pass the feelings by", "if prairie rose \nthen show me your hips\nbuilt bravely we machines\nlike tractor\nlike four by four\nshuck me an oyster\nor hock me a chuckwagon", "but we are near sea\nand somehow always above it", "cause & effect is a crocodile\nor a clock gone tick-tock\nbut now we got them phones\nsmart silent killers \nlike shark\nlike disease", "gertrude stein\nor seinfeld\ngot yer costanzas\nin meditation", "coral or correlate\nor collate the conditions\nthink of all the wonderful\nways we anthropomorphise\nthe incredible crustaceans\nor just make them edible", "if there is bait\nthere is fishing\ntackle and gear me\nor reel me in\ncloser to shore\nto perceive the pelican\nbrief as she dives\nbetter at fishing\nthan we are \nefficient & effective\nimitate and intonate\nwe've learned everything\nfrom natural nature", "give me a hand\nclap hands \nhand me a beer\nhandifolk on vacation", "i wrote but i can't poet", "proper poets\nteach at universities\nand have fancy degrees\nor host boring podcasts\nor have editors and publishers", "proper poets\ndon't eat fast food", "proper poets\nprobably don't eat tacos\nbecause proper poets \ngot class and grammar", "proper poets \nall got that same voice\nwhere did that come from?", "proper poetry\nis theft and don't\ndare tell me otherwise", "proper poets \nburn at the beach\nlobsters at the boil", "no proper poetry here\nor maybe, but that's contestable", "breakwater and levy it fast", "i am approximately\n75,000 enzymes strong \nwith a set of rattling teeth\nhungry for seafood", "came across \nbeach side conversation\nabout lorca:\nproper poets got good teeth\noral hygiene is important\nlorca had too many cavities\nteeth not white enough\nthat's why the facsists killed him", "maybe we better as \nspaghetti western?\nmaybe if we wander less\nand wonder more ...", "wick a wish a candlestick\nand pass me the tv dinner", "if sandcastle\nstudies architecture", "if young\nsmart\nanimalwise\nprime \na proper\nhome ", "if Instagram\nthen barely living", "two thumbs\nto keep the score", "if green\ni'd rather not kale\nkelp it together kevin", "if beach not enough\ndrive to the mountains\npurify me pine\njust don't enable me", "pry me another hour\nwith the crowbar of today\nand just like little fishies\ni'll swim to swim away.", "poempoem or pom pom\nalmost baby after prom prom", "all alberta boi\nor alpha centauri \ntriple eh beef\nground or chuck round\ni am impossible in too many ways", "i'm feeling driftwood\nstranded on beach\nor all log driver's waltz", "or just fresh cut pine\ngone birling down\nen down whitewater\nor just stepping lightly", "well opine the pinebeatle \nin ten words or less\ni double dare you", "please me prairie\nor leave me on the lark\ncelebrate the cephalopods\nor give em the goat", "we are a few tentacles \nshort of a rodeo \nbut we here anyway", "under sun\nin warm water\nlazy lagoon\ngusty gulf\nlow tide\nand bona fide", "if not veracruz\nthen where?", "happy in xalapa\nand fuck new york\npoets anyway ", "orchid or are you kidding me\ni've bloomed in much harsher places", "she be cut so\nstitch her with literature\nand pack my mouth with poems", "i am a catalogue of worn parts", "only mobile cause i can be\nand there is my privilege\nand it disgusts me", "sugerchide and gest me\npalm\u2014cane\u2014coconut\nall caffeine and sangre\nwe are only old as the\nlast story told", "and at this moment\nnone short nor tall\nnope i've none left for y'all", "but if a single cloud\nthen sing the moon to come\nsing sweet lil birdie\nsing the day is done."];
+    let current = 0;
+
+    function renderStanza() {
+      document.getElementById('stanzaBox').innerHTML = stanzas[current].replace(/\n/g, '<br>');
+      document.getElementById('pageIndicator').textContent = "Page " + (current + 1) + " of " + stanzas.length;
+    }
+
+    function nextStanza() {
+      if (current < stanzas.length - 1) {
+        current++;
+        renderStanza();
+      }
+    }
+
+    function prevStanza() {
+      if (current > 0) {
+        current--;
+        renderStanza();
+      }
+    }
+
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
+    }
+
+    function exitPage(event) {
+      event.stopPropagation();
+      window.location.href = "/";
+    }
+
+    function startBook() {
+      const mirror = document.getElementById('mirror');
+      mirror.classList.add('crack');
+      setTimeout(() => {
         document.querySelector('.cover').style.display = 'none';
-        const container = document.getElementById('poem-container');
-        container.style.display = 'block';
-        document.getElementById('pauseBtn').style.display = 'inline-block';
-        startScroll();
-      }
-    
-      function startScroll() {
-        const container = document.getElementById('poem-container');
-        scrollInterval = setInterval(() => {
-          if (!isPaused) container.scrollTop += 0.3;
-        }, 10);
-      }
-    
-      function toggleScroll() {
-        isPaused = !isPaused;
-        document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
-      }
-    
-      function toggleMode(event) {
-        const body = document.body;
-        if (body.classList.contains('green-mode')) {
-          body.classList.remove('green-mode');
-          body.classList.add('blue-mode');
-          event.target.textContent = 'green mode';
-        } else {
-          body.classList.remove('blue-mode');
-          body.classList.add('green-mode');
-          event.target.textContent = 'blue mode';
-        }
-      }
-    
-      function exitPage() {
-        window.location.href = '/index.html'; 
-      }
-    
-      window.showPoem = showPoem;
-      window.toggleScroll = toggleScroll;
-      window.toggleMode = toggleMode;
-      window.exitPage = exitPage;
+        document.getElementById('reader').style.display = 'flex';
+        renderStanza();
+      }, 1200);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextStanza();
+      if (e.key === 'ArrowLeft') prevStanza();
     });
-    </script>    
+  </script>
 </body>
 </html>
