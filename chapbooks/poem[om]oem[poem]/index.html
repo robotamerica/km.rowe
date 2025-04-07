@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>poem[oṃ]oem[poem] – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    body.green-mode { color: #9aff9a; }
+
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    .cover pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+    #poem-container {
+      display: none;
+      height: 100vh;
+      overflow-y: scroll;
+      padding: 2rem;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    #poem {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="toggleScroll()" id="pauseBtn" style="display: none;">pause</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="showPoem()">
+    <pre>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⣤⡀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣤⡞⢦⢦⢲⡜⢯⢦⢳⠣⢹⠿⠽⣷⡿⠁
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⣷⠘⡜⣄⡗⡾⡍⣄⡎⢆⡿⠁⣾⡿⠁⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡟⢦⢳⠳⡸⣼⢳⠙⡸⡉⡼⠇⣾⡿⠁⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⡟⢡⣇⢳⣱⢏⢧⢳⠳⣩⡏⢼⣿⠁⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡿⠜⡜⣌⢦⣏⠎⣄⣮⢒⡗⣼⣿⠃⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⢿⡑⡼⡜⡜⡾⡼⡙⣜⢤⡛⣱⣿⠃⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⡿⡱⡼⡑⣼⡹⠧⡓⡝⢌⡮⣹⣿⠃⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⡑⡼⣕⡽⣎⡷⣓⡝⣭⡺⣰⣿⠇⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⢟⢐⢞⣍⡞⣖⣓⣜⠞⣤⡞⢱⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⣿⡿⡩⣪⡪⣚⢯⡳⢝⢍⠭⣤⠟⢡⣾⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡾⠟⣉⠴⠋⡢⡞⣣⡞⡽⠎⢱⢔⣑⡼⣉⣴⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⣴⣷⣤⣰⣆⣤⣠⠠⠄⡴⡾⣿⣽⣖⣫⢣⡜⣩⣸⠖⣧⡛⡕⣜⡥⢖⣭⣾⢿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠈⠉⠛⠿⣿⣿⣿⣿⡿⠶⠿⢾⣥⣸⣸⣧⣹⣷⣏⣛⠮⠼⠓⣩⣴⡿⠟⢁⣾⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠉⠙⠻⠿⣷⣶⣤⣀⣼⣿⠹⢿⣿⣿⣷⣶⣶⣾⠿⠋⠀⠀⣼⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⣿⣿⣷⣦⣤⣈⠉⠻⣿⢿⣿⣶⣤⣀⣼⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼⣰⢞⣿⣡⣀⣉⠙⠻⣿⣶⣦⣦⣨⣝⣛⣿⣿⣷⣦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⠀⢙⣪⣟⣚⢣⠯⡝⣭⣿⡿⢿⣿⣿⠟⠛⠻⠿⣿⣿⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣿⣷⡿⠟⠛⠉⠀⠀⠀⠉⠐⠙⠓⣿⣛⣼⠃⠀⠀⠀⠀⣀⣽⣿⡿⣿⣿⣿⣿⣂⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠘⣧⡟⢉⠀⢀⠀⠐⠀⠉⠀⠀⠀⠀⠀⡠⣿⡟⠀⠀⣠⣤⣾⣿⠟⠋⠁⠀⠀⠈⠙⠻⠟⠁⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣤⣾⡿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣽⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠁⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  
+      <h1>poem[oṃ]oem[poem]</h1>
+      by kevin m rowe
+
+  <em>click to begin</em>
+    </pre>
+  </div>
+
+  <div id="poem-container">
+    <div id="poem">
+      poem[oṃ]oem[poem]
+
+      if there is water
+      there is beach
+      if there is sky
+      and ground
+      or sea and sun 
+      there is horizon
+      if there are mountains
+      they like little broccoli heads
+      if there are antenna
+      then invisible communication
+      all about and abound 
+      
+      if there is sand 
+      then sand goes in shoe
+      or between pages of book
+      or spit goes the oyster
+      in pearl glow of day
+      
+      if there are blackbirds
+      crackle and caw 
+      
+      if the current is wet
+      then take us away
+      
+      first past the post
+      lagoon or emerald coast
+      we wade wisely in the shallows
+      
+      if there is tree
+      then shade
+      
+      if there are trees 
+      then shapes like combs
+      or paint brushes 
+      
+      if there is wind 
+      catch me here or there
+      
+      if there is beer
+      several limes halved and squeezed
+      
+      it there are glasses 
+      please let me read
+      
+      if there is language
+      english or spanish
+      let me imagine words 
+      and words to describe
+      subaquatic says nature
+      squiggly or squirmy things
+      silver and scaly things
+      
+      bubbles
+      darkness
+      brightness
+      blue 
+      blue-green
+      nameless shades
+      all liquid skin
+      and mysterious
+      
+      if there are waves
+      constant sound 
+      somewhere between
+      wind and water
+      somewhere between
+      old television at midnight
+      or smartphone fuzz
+      all intelligent—we think
+      all crafty creatures—we believe
+      but brimming with bottomless ego
+      we wrong we wrong 
+      
+      if weather
+      let there be saint of climate
+      with chefs dying in this heat 
+      too hot in the kitchen
+      killing themselves for capital
+      
+      if bones
+      unearth them as fossils
+      it be nicer that way
+      
+      if smiles
+      not a dentist ad
+      but gappy happy
+      yellow teeth
+      
+      left the toothbrush at home
+      left the cat alone 
+      left the plants unwatered—
+      let there be rain
+      
+      let there be children smarter than we
+      let there be animals we dare not eat
+      let there be bread
+      when you let us eat cake
+      let there be leftovers
+      wrapped on tinfoil or plastic wrap
+      let there be bottles and fill them with wine
+      
+      if pure sun
+      then maybe we will burn
+      
+      if salsa picante
+      please up the ante
+      
+      if red brick on shore
+      please build some more
+      
+      if there are buses
+      tourists and plastic
+      if there is palm
+      cocoloco and fantastic
+      
+      if there is day
+      let there be night
+      but little binaries
+      leave us too tight
+      
+      we are water
+      and skin
+      and hair
+      and teeth
+      too many holes
+      not to sink
+      barely aquatic
+      beach bums 
+      itchy sandfleas 
+      trying to escape 
+      islands
+      islands
+      islands 
+      oh boey
+      or old bodies
+      we march 
+      in the blameless heat
+      
+      if hangnail
+      likely pain
+      if astral awareness
+      stargaze guide 
+      if red table
+      don't say coca
+      if there is noon
+      there is somewhere after
+      
+      splendid swimmer
+      or fisherman
+      blue web of net 
+      late for lagoon
+      crabs crafting burrows
+      but bird builds a nest 
+      not nobody nowhere
+      except all here and now
+      on big blue marble
+      moaning better beat the heat
+      
+      riptide en let it slide
+      just let her take you
+      and swim to the side
+      foam and fuzz
+      and salty spray
+      legs burn
+      lungs burn
+      mouth full of saltwater
+      skin stings 
+      muscles tight
+      ears ring
+      vibrating on shore with
+      near death kissy kisses
+      everything shines
+      everything sings
+      
+      but nothing makes one question mortality
+      like an unstable chair
+      from six legs to none 
+      better buy me a saint
+      saint salt 
+      saint sun
+      or sand 
+      saint sea
+      or applaud the appalling apostle
+      apiary honey sucked starlight
+      dripping red from
+      blue blue sky
+      but science lies as much as
+      religion or poetry 
+      depending on how you write it
+      depending on how you read it
+      
+      echo me ecology
+      or empty me emberto 
+      dense attire written to wear
+      rather than to be 
+      a possibility
+      i am wrong 
+      but why you so pretty?
+      
+      if you don't adore the letter q
+      then who the fuck are you?
+      
+      if question
+      maybe answer
+      or big kiss on mouth 
+      or constant consent
+      or face the consequence
+      
+      we can wash yesterday off
+      but what of tomorrow
+      
+      if possibility
+      be aggressive
+      bee-ee-agressive 
+      
+      if want none
+      wonton soup and some 
+      
+      i am windbent
+      whiplash and whipperwheel
+      tone or tone-deaf
+      pour a lil on the tombstone
+      talk to me toothsayer
+      on toffee thick tuesday
+      tantamount to humidity
+      which is very far from humility
+      
+      sweet or saltwater
+      a sweaty little story 
+      water or animalcræft
+      hands for pincers 
+      walk a little sideways
+      snore when we drunk
+      
+      if there be floss
+      let it be candy
+      let it be blue
+      or pink
+      the colour of sky
+      depending on what time it is
+      
+      we are lavender and lily
+      worm or beechwood
+      i am not known for
+      the number of fingers
+      or toes i possess
+      but maybe i should be
+      
+      maybe i talk too much
+      when i should listen
+      
+      maybe my shoulder is
+      sore with age
+      
+      but if sandles 
+      don't let me be toeless
+      
+      shade is important
+      mostly when you need it
+      
+      we got ice
+      all sorts of ice
+      so long as it's cubed
+      
+      don't be fooled
+      by these rocks i got
+      i'm still kevvy from the block
+      
+      kevvy metal and other lead boots
+      
+      if tomorrow
+      then it's today
+      
+      if today
+      it's no longer yesterday
+      
+      left money in my pocket before laundry
+      i'm that kind of forgetful
+      
+      part with me palapa
+      purpose like paella 
+      and pass the feelings by
+      
+      if prairie rose 
+      then show me your hips
+      built bravely we machines
+      like tractor
+      like four by four
+      shuck me an oyster
+      or hock me a chuckwagon
+      
+      but we are near sea
+      and somehow always above it
+      
+      cause & effect is a crocodile
+      or a clock gone tick-tock
+      but now we got them phones
+      smart silent killers 
+      like shark
+      like disease
+      
+      gertrude stein
+      or seinfeld
+      got yer costanzas
+      in meditation
+      
+      coral or correlate
+      or collate the conditions
+      think of all the wonderful
+      ways we anthropomorphise
+      the incredible crustaceans
+      or just make them edible
+      
+      if there is bait
+      there is fishing
+      tackle and gear me
+      or reel me in
+      closer to shore
+      to perceive the pelican
+      brief as she dives
+      better at fishing
+      than we are 
+      efficient & effective
+      imitate and intonate
+      we've learned everything
+      from natural nature
+      
+      give me a hand
+      clap hands 
+      hand me a beer
+      handifolk on vacation
+      
+      i wrote but i can't poet
+      
+      proper poets
+      teach at universities
+      and have fancy degrees
+      or host boring podcasts
+      or have editors and publishers
+      
+      proper poets
+      don't eat fast food
+      
+      proper poets
+      probably don't eat tacos
+      because proper poets 
+      got class and grammar
+      
+      proper poets 
+      all got that same voice
+      where did that come from?
+      
+      proper poetry
+      is theft and don't
+      dare tell me otherwise
+      
+      proper poets 
+      burn at the beach
+      lobsters at the boil
+      
+      no proper poetry here
+      or maybe, but that's contestable
+      
+      breakwater and levy it fast
+      
+      i am approximately
+      75,000 enzymes strong 
+      with a set of rattling teeth
+      hungry for seafood
+      
+      came across 
+      beach side conversation
+      about lorca:
+      proper poets got good teeth
+      oral hygiene is important
+      lorca had too many cavities
+      teeth not white enough
+      that's why the facsists killed him
+      
+      maybe we better as 
+      spaghetti western?
+      maybe if we wander less
+      and wonder more ...
+      
+      wick a wish a candlestick
+      and pass me the tv dinner
+      
+      if sandcastle
+      studies architecture
+      
+      if young
+      smart
+      animalwise
+      prime 
+      a proper
+      home 
+      
+      if Instagram
+      then barely living
+      
+      two thumbs
+      to keep the score
+      
+      if green
+      i'd rather not kale
+      kelp it together kevin
+      
+      if beach not enough
+      drive to the mountains
+      purify me pine
+      just don't enable me
+      
+      pry me another hour
+      with the crowbar of today
+      and just like little fishies
+      i'll swim to swim away.
+      
+      poempoem or pom pom
+      almost baby after prom prom
+      
+      all alberta boi
+      or alpha centauri 
+      triple eh beef
+      ground or chuck round
+      i am impossible in too many ways
+      
+      i'm feeling driftwood
+      stranded on beach
+      or all log driver's waltz
+      
+      or just fresh cut pine
+      gone birling down
+      en down whitewater
+      or just stepping lightly
+      
+      well opine the pinebeatle 
+      in ten words or less
+      i double dare you
+      
+      please me prairie
+      or leave me on the lark
+      celebrate the cephalopods
+      or give em the goat
+      
+      we are a few tentacles 
+      short of a rodeo 
+      but we here anyway
+      
+      under sun
+      in warm water
+      lazy lagoon
+      gusty gulf
+      low tide
+      and bona fide
+      
+      if not veracruz
+      then where?
+      
+      happy in xalapa
+      and fuck new york
+      poets anyway 
+      
+      orchid or are you kidding me
+      i've bloomed in much harsher places
+      
+      she be cut so
+      stitch her with literature
+      and pack my mouth with poems
+      
+      i am a catalogue of worn parts
+      
+      only mobile cause i can be
+      and there is my privilege
+      and it disgusts me
+      
+      sugerchide and gest me
+      palm—cane—coconut
+      all caffeine and sangre
+      we are only old as the
+      last story told
+      
+      and at this moment
+      none short nor tall
+      nope i've none left for y'all
+      
+      but if a single cloud
+      then sing the moon to come
+      sing sweet lil birdie
+      sing the day is done.
+    </div>
+  </div>
+
+  <script>
+    let scrollInterval;
+    let isPaused = false;
+
+    function showPoem() {
+      document.querySelector('.cover').style.display = 'none';
+      document.getElementById('poem-container').style.display = 'block';
+      document.getElementById('pauseBtn').style.display = 'inline-block';
+      startScroll();
+    }
+
+    function startScroll() {
+      const container = document.getElementById('poem-container');
+      scrollInterval = setInterval(() => {
+        if (!isPaused) {
+          container.scrollTop += 0.3;
+        }
+      }, 10);
+    }
+
+    function toggleScroll() {
+      isPaused = !isPaused;
+      document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
+    }
+
+    function toggleMode(event) {
+      const body = document.body;
+      if (body.classList.contains('green-mode')) {
+        body.classList.remove('green-mode');
+        body.classList.add('blue-mode');
+        event.target.textContent = 'green mode';
+      } else {
+        body.classList.remove('blue-mode');
+        body.classList.add('green-mode');
+        event.target.textContent = 'blue mode';
+      }
+    }
+
+    function exitPage(event) {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
