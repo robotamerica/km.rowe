@@ -103,10 +103,20 @@ a:hover, .toggle-mode:hover { animation: linkFlicker 0.15s steps(1) infinite; tr
 
 .categories { width: 100%; margin-bottom: 1.5rem; }
 
+.categories ul { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+.categories li { margin-bottom: 0; }                                                              
+
 .posts { justify-content: center; }
 
 .post-card { width: 100% !important; max-width: 100% !important; }
 
+.logo { font-size: 2rem; margin-top: 1rem; }
+
+nav a { display: inline-block; margin-bottom: 0.5rem; }
+                                                               
+header { padding-bottom: 1rem; margin-bottom: 1rem; }
+                                                               
 .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 
 .about-container { flex-direction: column; }
