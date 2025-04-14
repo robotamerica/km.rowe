@@ -9,16 +9,8 @@ const STYLE = '../style.css';
 
 const template = (title, body) => `<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>${title} – km.rowe</title>
-  <link rel="stylesheet" href="${STYLE}" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet">
-  <style>
-    body { padding: 2rem; font-family: 'IBM Plex Mono', monospace; }
-    main { max-width: 700px; margin: auto; }
-  </style>
-</head>
+${head}
+
 <body class="alt-mode">
   <div class="scanlines"></div>
   <header>
@@ -29,11 +21,48 @@ const template = (title, body) => `<!DOCTYPE html>
       <a href="../blog.html">blog</a>
       <a href="../links.html">links</a>
     </nav>
+    <button class="toggle-mode" onclick="toggleCRT()">green mode</button>
   </header>
+
   <main>
     <h1>${title}</h1>
     ${body}
   </main>
+
+  <script>
+    // CRT toggle logic
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedMode = localStorage.getItem('mode');
+      const body = document.body;
+      const modeBtn = document.querySelector('.toggle-mode');
+      if (savedMode === 'crt-mode') {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        if (modeBtn) modeBtn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        if (modeBtn) modeBtn.textContent = 'green mode';
+      }
+    });
+
+    function toggleCRT() {
+      const body = document.body;
+      const btn = document.querySelector('.toggle-mode');
+      const isAlt = body.classList.contains('alt-mode');
+      if (isAlt) {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        localStorage.setItem('mode', 'crt-mode');
+        btn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        localStorage.setItem('mode', 'alt-mode');
+        btn.textContent = 'green mode';
+      }
+    }
+  </script>
 </body>
 </html>`;
 
