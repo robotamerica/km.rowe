@@ -113,9 +113,13 @@
     let allPosts = [];
     let currentSort = 'desc';
 
-    async function loadPosts() {
-      const res = await fetch('posts/posts.json');
-      allPosts = await res.json();
+  async function loadPosts() {
+    const res = await fetch('posts/posts.json');
+    const rawPosts = await res.json();
+
+   // ✅ Only include posts that link to .html files
+      allPosts = rawPosts.filter(p => p.file && p.file.endsWith('.html'));
+
       sortAndRender(currentSort);
       buildCategorySidebar();
     }
