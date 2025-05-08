@@ -113,12 +113,24 @@
     let allPosts = [];
     let currentSort = 'desc';
 
-  async function loadPosts() {
-    const res = await fetch('posts/posts.json');
-    const rawPosts = await res.json();
+    async function loadPosts() {
+      const res = await fetch('posts/posts.json');
+      const rawPosts = await res.json();
 
-   // ✅ Only include posts that link to .html files
-      allPosts = rawPosts.filter(p => p.file && p.file.endsWith('.html'));
+      // Deduplicate by title + date
+      const seen = new Set();
+      const uniquePosts = rawPosts.filter(p => {
+        const key = `${p.title}|${p.date}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      // Replace .md with .html
+      allPosts = uniquePosts.map(p => ({
+        ...p,
+        file: p.file.replace(/\.md$/, '.html')
+      }));
 
       sortAndRender(currentSort);
       buildCategorySidebar();
@@ -169,8 +181,7 @@
           <p>${post.description}</p>
         `;
         card.addEventListener('click', () => {
-          const target = post.file.replace('.md', '.html');
-          window.open(`posts/${target}`, '_blank');
+          window.open(`posts/${post.file}`, '_blank');
         });
         container.appendChild(card);
       });
@@ -273,3 +284,4 @@
   </script>
 </body>
 </html>
+
