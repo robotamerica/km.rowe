@@ -11,13 +11,73 @@ const template = (title, body) => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title} – km.rowe</title>
   <link rel="stylesheet" href="${STYLE}" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet">
-  <style>
-    body { padding: 2rem; font-family: 'IBM Plex Mono', monospace; }
-    main { max-width: 700px; margin: auto; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
+</head>
+<body class="alt-mode">
+  <div class="scanlines"></div>
+  <header>
+    <div class="logo blinking-cursor">km.rowe</div>
+    <nav>
+      <a href="../index.html">home</a>
+      <a href="../chapbooks.html">chapbooks</a>
+      <a href="../blog.html">blog</a>
+      <a href="../links.html">links</a>
+    </nav>
+    <button class="toggle-mode" onclick="toggleCRT()">green mode</button>
+  </header>
+
+  <main>
+    <h1>${title}</h1>
+    ${body}
+  </main>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedMode = localStorage.getItem('mode');
+      const body = document.body;
+      const modeBtn = document.querySelector('.toggle-mode');
+      if (savedMode === 'crt-mode') {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        if (modeBtn) modeBtn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        if (modeBtn) modeBtn.textContent = 'green mode';
+      }
+    });
+
+    function toggleCRT() {
+      const body = document.body;
+      const btn = document.querySelector('.toggle-mode');
+      const isAlt = body.classList.contains('alt-mode');
+      if (isAlt) {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        localStorage.setItem('mode', 'crt-mode');
+        btn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        localStorage.setItem('mode', 'alt-mode');
+        btn.textContent = 'green mode';
+      }
+    }
+  </script>
+</body>
+</html>`;
+
+const indexTemplate = (category, posts) => `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${category} – km.rowe</title>
+  <link rel="stylesheet" href="${STYLE}" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
 </head>
 <body class="alt-mode">
   <div class="scanlines"></div>
@@ -30,27 +90,7 @@ const template = (title, body) => `<!DOCTYPE html>
       <a href="../links.html">links</a>
     </nav>
   </header>
-  <main>
-    <h1>${title}</h1>
-    ${body}
-  </main>
-</body>
-</html>`;
-
-const indexTemplate = (category, posts) => `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>${category} – km.rowe</title>
-  <link rel="stylesheet" href="${STYLE}" />
-  <style>
-    body { padding: 2rem; font-family: 'IBM Plex Mono', monospace; }
-    .post-list { max-width: 600px; margin: auto; }
-    .post-list article { border-bottom: 1px solid #333; padding: 1rem 0; }
-  </style>
-</head>
-<body class="alt-mode">
-  <main class="post-list">
+  <main class="post-list" style="max-width: 700px; margin: auto; padding: 2rem;">
     <h2>${category}</h2>
     ${posts.map(p => `
       <article>
@@ -73,7 +113,7 @@ const build = async () => {
     const { data, content: body } = matter(content);
 
     if (!data.title || !data.date || !data.category || !data.description) {
-      console.warn(`Skipping ${file}: missing frontmatter`);
+      console.warn(`⚠️ Skipping ${file}: missing frontmatter`);
       continue;
     }
 
@@ -88,7 +128,7 @@ const build = async () => {
   posts.sort((a, b) => new Date(b.date) - new Date(a.date));
   await fs.writeFile(path.join(OUTPUT_DIR, 'posts.json'), JSON.stringify(posts, null, 2));
 
-  // Generate per-category index pages
+  // Generate category pages
   const byCategory = {};
   posts.forEach(post => {
     byCategory[post.category] ||= [];
@@ -101,7 +141,9 @@ const build = async () => {
     await fs.writeFile(path.join(OUTPUT_DIR, filename), html, 'utf-8');
   }
 
-  console.log("✅ Build complete.");
+  console.log("✅ Blog build complete.");
 };
+
+build();
 
 build();

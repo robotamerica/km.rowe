@@ -1,7 +1,7 @@
 /* === BASE FONT + STRUCTURE === */
 body {
   background: black;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 18px;
   margin: 0;
   padding: 2rem;
@@ -26,8 +26,10 @@ body.crt-mode {
 
 /* === HEADINGS & LOGO === */
 .logo,
-h1, h2, h3 {
-  font-family: 'VT323', monospace;
+h1,
+h2,
+h3 {
+  font-family: "VT323", monospace;
   font-size: 2rem;
   margin: 2rem 0 1rem;
   text-transform: lowercase;
@@ -40,14 +42,19 @@ h1, h2, h3 {
 }
 
 .blinking-cursor::after {
-  content: '_';
+  content: "_";
   animation: blink 1s infinite;
   margin-left: 4px;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* === HEADER === */
@@ -73,7 +80,7 @@ nav a {
   position: absolute;
   top: 0;
   right: 0;
-  font-family: 'VT323', monospace;
+  font-family: "VT323", monospace;
   background: transparent;
   border: 1px dashed currentColor;
   padding: 0.4rem 1rem;
@@ -87,8 +94,10 @@ nav a {
 .scanlines {
   pointer-events: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: repeating-linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.05),
@@ -101,9 +110,16 @@ nav a {
 }
 
 @keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.98; }
-  60% { opacity: 0.99; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.98;
+  }
+  60% {
+    opacity: 0.99;
+  }
 }
 
 body.crt-mode,
@@ -123,9 +139,15 @@ body.crt-mode .toggle-mode {
 }
 
 @keyframes linkFlicker {
-  0%   { opacity: 1; }
-  50%  { opacity: 0.85; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 a:hover,
@@ -178,7 +200,7 @@ a:hover,
 }
 
 .ascii-preview {
-  font-family: 'VT323', monospace;
+  font-family: "VT323", monospace;
   font-size: 10px;
   color: inherit;
   white-space: pre;
@@ -201,15 +223,50 @@ a:hover,
 .blog-layout {
   display: flex;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .categories {
   min-width: 150px;
+  flex: 1 1 180px;
 }
 
 .categories ul {
   padding-left: 0;
   list-style: none;
+}
+
+.posts {
+  flex: 3 1 600px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.post-card {
+  background: black;
+  border: 2px solid currentColor;
+  padding: 1rem;
+  font-family: "IBM Plex Mono", monospace;
+  width: 280px;
+  max-width: 100%;
+  box-sizing: border-box;
+  cursor: grab;
+  transition: transform 0.2s;
+}
+
+.post-card:hover {
+  transform: scale(1.02);
+}
+
+.post-card h3 {
+  margin-top: 0;
+}
+
+.post-card p {
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
 .posts article {
@@ -222,6 +279,10 @@ a:hover,
   font-size: 0.9rem;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* === LINKS PAGE === */
 .links li {
   list-style: none;
@@ -230,11 +291,14 @@ a:hover,
 
 .social {
   margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .social a {
   display: block;
-  margin-bottom: 0.5rem;
+  white-space: nowrap;
 }
 
 /* === ABOUT PAGE IMAGE LAYOUT === */
@@ -259,7 +323,8 @@ a:hover,
   width: 100%;
   height: auto;
   display: block;
-  filter: contrast(1.1) brightness(0.9) grayscale(20%) drop-shadow(0 0 5px currentColor);
+  filter: contrast(1.1) brightness(0.9) grayscale(20%)
+    drop-shadow(0 0 5px currentColor);
   image-rendering: pixelated;
   mix-blend-mode: screen;
   position: relative;
@@ -267,10 +332,12 @@ a:hover,
 }
 
 .about-image::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
@@ -298,19 +365,242 @@ a:hover,
 ::-webkit-scrollbar-thumb:hover {
   background-color: #9aff9a;
 }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #aaf0ff #111;
 }
 
 /* === RESPONSIVE === */
-@media screen and (max-width: 640px) {
-  .chapbook-scroll {
-      gap: 1rem;
-      padding: 0.5rem;
+@media screen and (max-width: 768px) {
+  body {
+    padding: 1rem;
   }
+
+  .blog-layout {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .categories {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .categories ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .categories li {
+    margin-bottom: 0;
+  }
+
+  .posts {
+    justify-content: center;
+  }
+
+  .post-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .logo {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  header {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .about-container {
+    flex-direction: column;
+  }
+
+  .about-text,
+  .about-image {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ascii-preview {
+    font-size: 8px;
+  }
+
+  .chapbook-scroll {
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
   .chapbook-scroll .chapbook {
-      min-width: 260px;
-      max-width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+  }
+
+  .social {
+    flex-direction: column;
   }
 }
+
+/* added e-paper mode */
+
+/* palette + globals */
+body.epaper-mode {
+    /* neutral “paper” look */
+    background: #f6f6f1 !important;
+    color: #1a1a1a !important;
+    text-shadow: none !important;
+    animation: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  
+    /* expose tokens so scrollbars & accents can reuse */
+    --paper-bg: #f6f6f1;
+    --card-bg: #fbfbf8;
+    --ink: #1a1a1a;
+    --muted-ink: #333;
+    --rule: #aaa;
+    --rule-strong: #444;
+    --link: #222;           /* dark gray instead of blue for e-ink consistency */
+    --link-hover: #000;
+  
+    /* scrollbar tokens (Firefox + WebKit below consume these) */
+    --scrollbar-thumb: #999;
+    --scrollbar-track: #e0e0e0;
+  }
+  
+  /* kill CRT artifacts */
+  body.epaper-mode.scanlines,
+  body.epaper-mode .scanlines {
+    display: none !important;
+  }
+  body.epaper-mode.crt-mode,
+  body.epaper-mode.alt-mode {
+    /* ensure only one mode is active */
+    animation: none !important;
+  }
+  
+  /* typography & links */
+  body.epaper-mode a,
+  body.epaper-mode .toggle-mode {
+    color: var(--link) !important;
+    text-shadow: none !important;
+  }
+  body.epaper-mode a:hover,
+  body.epaper-mode .toggle-mode:hover {
+    animation: none !important;
+    transform: none !important;
+    text-decoration: underline;
+  }
+  
+  /* header & nav */
+  body.epaper-mode header {
+    border-bottom: 1px solid var(--rule) !important;
+  }
+  body.epaper-mode nav a {
+    text-decoration: none;
+  }
+  
+  /* cards, posts, lists */
+  body.epaper-mode .post-card,
+  body.epaper-mode .chapbook,
+  body.epaper-mode .chapbook-scroll .chapbook {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--rule) !important;
+    box-shadow: none !important;
+  }
+  
+  /* chapbook strip */
+  body.epaper-mode .chapbook-scroll {
+    gap: 1.5rem;
+  }
+  body.epaper-mode .chapbook-title,
+  body.epaper-mode .chapbook-author {
+    color: var(--muted-ink);
+  }
+  
+  /* general rules that were hard-coded to black */
+  body.epaper-mode .post-card,
+  body.epaper-mode .chapbook-scroll .chapbook {
+    /* override your black backgrounds */
+    background: var(--card-bg) !important;
+  }
+  
+  /* ascii previews remain mono but slightly smaller contrast */
+  body.epaper-mode .ascii-preview {
+    color: var(--ink);
+  }
+  
+  /* about page image: remove CRT filters */
+  body.epaper-mode .about-image img.crt-image {
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    image-rendering: auto !important;
+    box-shadow: none !important;
+  }
+  
+  /* controls */
+  body.epaper-mode .toggle-mode {
+    border: 1px solid var(--rule-strong) !important;
+    background: transparent !important;
+  }
+  
+  /* firefox scrollbars (inherits tokens) */
+  body.epaper-mode {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  
+  /* webkit scrollbars (inherits tokens) */
+  body.epaper-mode ::-webkit-scrollbar {
+    height: 6px;
+    width: 8px;
+  }
+  body.epaper-mode ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  body.epaper-mode ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 10px;
+    border: 2px solid var(--scrollbar-track);
+  }
+  body.epaper-mode ::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+  }
+  
+  /* motion discipline: if user prefers less motion, also clamp in other modes */
+  @media (prefers-reduced-motion: reduce) {
+    body,
+    body * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+  
+  /* printing maps to e-paper automatically */
+  @media print {
+    body {
+      background: #fff !important;
+      color: #000 !important;
+      text-shadow: none !important;
+    }
+    .scanlines { display: none !important; }
+    a { text-decoration: underline; color: #000 !important; }
+    .post-card, .chapbook, .chapbook-scroll .chapbook {
+      background: #fff !important;
+      border: 1px solid #000 !important;
+    }
+  }
+  

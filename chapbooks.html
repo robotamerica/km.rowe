@@ -1,27 +1,32 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<title>chapbooks – km.rowe</title>
-<link href="style.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>chapbooks – km.rowe</title>
+  <link href="style.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
     .chapbook-scroll {
       display: flex;
       overflow-x: auto;
-      gap: 2rem;
+      gap: 1rem;
       padding: 1rem 0;
       scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
     }
     .chapbook {
-      min-width: 300px;
-      max-width: 300px;
+      flex: 0 0 auto;
+      width: 300px;
+      max-width: 90vw;
       scroll-snap-align: start;
       border: 2px solid currentColor;
       padding: 1rem;
-      box-sizing: border-box;
       background: black;
       transition: transform 0.3s;
     }
@@ -45,6 +50,20 @@
       font-size: 0.9em;
       opacity: 0.75;
     }
+
+    @media (max-width: 600px) {
+      .chapbook-scroll {
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+      .chapbook {
+        width: 90vw;
+        padding: 0.75rem;
+      }
+      .ascii-preview {
+        font-size: 8px;
+      }
+    }
   </style>
 </head>
 <body class="alt-mode">
@@ -64,7 +83,7 @@
 <h1>chapbooks</h1>
 <section class="chapbook-scroll">
 <div class="chapbook">
-<a href="/km.rowe/chapbooks/the-colour-mirror/index.html" target="_blank">
+<a href="/chapbooks/the-colour-mirror/index.html" target="_blank">
 <pre class="ascii-preview">
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢀⣀⣀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⣀⣀⡀⠀⠀⠀⠀⠀
@@ -86,7 +105,7 @@
 </a>
 </div>
 <div class="chapbook">
-<a href="/km.rowe/chapbooks/ecology-of-the-moment/index.html" target="_blank">
+<a href="/chapbooks/ecology-of-the-moment/index.html" target="_blank">
 <pre class="ascii-preview">
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⢰⣆⠀⢿⢢⡀⠸⣱⡀⢀⢤⡶⡄⠀⠀⠀⠀⠀⠀⠀⠀
@@ -106,7 +125,7 @@
 
 
 <div class="chapbook">
-<a href="/km.rowe/chapbooks/cana-y-camaron/index.html" target="_blank">
+<a href="/chapbooks/cana-y-camaron/index.html" target="_blank">
 <pre class="ascii-preview">
 ⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣤⣤⣀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢀⣀⡙⠻⢶⣶⣦⣴⣶⣶⣶⠾⠛⠛⠋⠉⠉⠉⠉⠙⠃⠀⠀⠀⠀⠀
@@ -128,7 +147,7 @@
 </a>
 </div>
 <div class="chapbook">
-<a href="/km.rowe/chapbooks/autogenic/index.html" target="_blank">
+<a href="/chapbooks/autogenic/index.html" target="_blank">
 <pre class="ascii-preview">
 ⠀⠀⢀⣤⣶⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⢀⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -156,53 +175,39 @@
 <div class="chapbook-title">autogenic mapping<br/><span class="chapbook-author">by kevin m rowe</span></div>
 </a>
 </div>
+<div class="chapbook">
+  <a href="/chapbooks/poem[om]oem[poem]/index.html" target="_blank">
+  <pre class="ascii-preview">
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⣤⡀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣤⡞⢦⢦⢲⡜⢯⢦⢳⠣⢹⠿⠽⣷⡿⠁
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⣷⠘⡜⣄⡗⡾⡍⣄⡎⢆⡿⠁⣾⡿⠁⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡟⢦⢳⠳⡸⣼⢳⠙⡸⡉⡼⠇⣾⡿⠁⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⡟⢡⣇⢳⣱⢏⢧⢳⠳⣩⡏⢼⣿⠁⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡿⠜⡜⣌⢦⣏⠎⣄⣮⢒⡗⣼⣿⠃⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⢿⡑⡼⡜⡜⡾⡼⡙⣜⢤⡛⣱⣿⠃⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⡿⡱⡼⡑⣼⡹⠧⡓⡝⢌⡮⣹⣿⠃⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⡑⡼⣕⡽⣎⡷⣓⡝⣭⡺⣰⣿⠇⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⢟⢐⢞⣍⡞⣖⣓⣜⠞⣤⡞⢱⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⣿⡿⡩⣪⡪⣚⢯⡳⢝⢍⠭⣤⠟⢡⣾⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡾⠟⣉⠴⠋⡢⡞⣣⡞⡽⠎⢱⢔⣑⡼⣉⣴⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⣴⣷⣤⣰⣆⣤⣠⠠⠄⡴⡾⣿⣽⣖⣫⢣⡜⣩⣸⠖⣧⡛⡕⣜⡥⢖⣭⣾⢿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠈⠉⠛⠿⣿⣿⣿⣿⡿⠶⠿⢾⣥⣸⣸⣧⣹⣷⣏⣛⠮⠼⠓⣩⣴⡿⠟⢁⣾⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠉⠙⠻⠿⣷⣶⣤⣀⣼⣿⠹⢿⣿⣿⣷⣶⣶⣾⠿⠋⠀⠀⣼⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⣿⣿⣷⣦⣤⣈⠉⠻⣿⢿⣿⣶⣤⣀⣼⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼⣰⢞⣿⣡⣀⣉⠙⠻⣿⣶⣦⣦⣨⣝⣛⣿⣿⣷⣦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⠀⢙⣪⣟⣚⢣⠯⡝⣭⣿⡿⢿⣿⣿⠟⠛⠻⠿⣿⣿⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣿⣷⡿⠟⠛⠉⠀⠀⠀⠉⠐⠙⠓⣿⣛⣼⠃⠀⠀⠀⠀⣀⣽⣿⡿⣿⣿⣿⣿⣂⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠘⣧⡟⢉⠀⢀⠀⠐⠀⠉⠀⠀⠀⠀⠀⡠⣿⡟⠀⠀⣠⣤⣾⣿⠟⠋⠁⠀⠀⠈⠙⠻⠟⠁⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣤⣾⡿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣽⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠁⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      </pre>
+  <div class="chapbook-title">poem[oṃ]oem[poem]<br/><span class="chapbook-author">by kevin m rowe</span></div>
+  </a>
+  </div>
 </section>
 </main>
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
+<script src="mode.js"></script>
 
-    function toggleCRT() {
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        modeBtn.textContent = 'green mode';
-      }
-      playClickSound();
-    }
-
-    function playClickSound() {
-      const sound = document.getElementById('click-sound');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
-    }
-
-    document.addEventListener('click', () => {
-      playClickSound();
-    });
-  </script>
 </body>
 </html>

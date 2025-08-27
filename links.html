@@ -2,9 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>links – km.rowe</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <style>
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .links {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 1rem;
+    }
+
+    .social a {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      .social {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body class="alt-mode">
   <div class="scanlines"></div>
@@ -26,9 +64,12 @@
     <h1>links</h1>
 
     <ul class="links">
+      <li><a href="https://kmrowe.info" target="_blank">kmrowe.info</a></li>
+      <li><a href="https://unexpected.quest" target="_blank">unexpectEd.quest</a></li>
       <li><a href="https://kmnada.page" target="_blank">kmnada.page</a></li>
       <li><a href="https://kmnada.site" target="_blank">kmnada.site</a></li>
       <li><a href="https://robotameri.ca" target="_blank">robotameri.ca</a></li>
+       <li><a href="https://404commons.com" target="_blank">the 404 commons</a></li>
     </ul>
 
     <section class="social">
@@ -38,52 +79,8 @@
     </section>
   </main>
 
-  <script>
-    // Apply stored mode on load
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
-  
-    function toggleCRT() {
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        modeBtn.textContent = 'green mode';
-      }
-      playClickSound();
-    }
-  
-    function playClickSound() {
-      const sound = document.getElementById('click-sound');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
-    }
-  
-    document.addEventListener('click', () => {
-      playClickSound();
-    });
-  </script>  
+  <script src="mode.js"></script>
+
 </body>
 </html>
+

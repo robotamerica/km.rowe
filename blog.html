@@ -2,51 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>blog – km.rowe</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     .blog-layout {
       display: flex;
+      flex-wrap: wrap;
       gap: 2rem;
       padding: 2rem;
     }
+
+    .categories {
+      flex: 1 1 180px;
+    }
+
     .categories ul {
       list-style: none;
       padding-left: 0;
+      margin: 0;
     }
+
     .categories li {
       margin-bottom: 0.5rem;
     }
+
     .categories a {
       cursor: pointer;
       display: block;
     }
-    .posts {
-      flex: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+
+    .categories select {
+      margin-top: 1rem;
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      background: black;
+      color: inherit;
+      border: 1px solid currentColor;
+      padding: 0.4rem;
     }
+
+    .posts {
+      flex: 3 1 600px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      width: 100%;
+    }
+
     .post-card {
       background: black;
       border: 2px solid currentColor;
       padding: 1rem;
       font-family: 'IBM Plex Mono', monospace;
-      width: 280px;
       cursor: grab;
       transition: transform 0.2s;
+      width: 100%;
+      box-sizing: border-box;
     }
+
     .post-card:hover {
       transform: scale(1.02);
     }
+
     .post-card h3 {
       margin-top: 0;
     }
+
     .post-card p {
       font-size: 0.9rem;
       opacity: 0.85;
     }
+
     .hidden {
       display: none !important;
     }
@@ -71,22 +100,45 @@
     <aside class="categories">
       <h2>categories</h2>
       <ul id="category-list"></ul>
+      <label for="sortSelect">sort by:</label>
+      <select id="sortSelect" onchange="sortPosts(this.value)">
+        <option value="desc">date ↓</option>
+        <option value="asc">date ↑</option>
+      </select>
     </aside>
     <section class="posts" id="post-grid"></section>
   </main>
 
   <script>
     let allPosts = [];
+    let currentSort = 'desc';
 
     async function loadPosts() {
       const res = await fetch('posts/posts.json');
-      allPosts = await res.json();
+      const rawPosts = await res.json();
 
-      allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Deduplicate by title + date
+      const seen = new Set();
+      const uniquePosts = rawPosts.filter(p => {
+        const key = `${p.title}|${p.date}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
 
+      // Replace .md with .html
+      allPosts = uniquePosts.map(p => ({
+        ...p,
+        file: p.file.replace(/\.md$/, '.html')
+      }));
+
+      sortAndRender(currentSort);
+      buildCategorySidebar();
+    }
+
+    function buildCategorySidebar() {
       const categories = Array.from(new Set(allPosts.map(p => p.category)));
       categories.sort();
-
       const catList = document.getElementById('category-list');
       catList.innerHTML = '';
 
@@ -99,8 +151,20 @@
         li.innerHTML = `<a onclick="filterPosts('${cat}')">${cat}</a>`;
         catList.appendChild(li);
       });
+    }
 
-      renderPosts(allPosts);
+    function sortAndRender(direction) {
+      currentSort = direction;
+      const sorted = [...allPosts].sort((a, b) => {
+        const da = new Date(a.date);
+        const db = new Date(b.date);
+        return direction === 'asc' ? da - db : db - da;
+      });
+      renderPosts(sorted);
+    }
+
+    function sortPosts(order) {
+      sortAndRender(order);
     }
 
     function renderPosts(posts) {
@@ -117,8 +181,7 @@
           <p>${post.description}</p>
         `;
         card.addEventListener('click', () => {
-          const target = post.file.replace('.md', '.html');
-          window.open(`posts/${target}`, '_blank');
+          window.open(`posts/${post.file}`, '_blank');
         });
         container.appendChild(card);
       });
@@ -172,52 +235,8 @@
 
     loadPosts();
   </script>
+<script src="mode.js"></script>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
-
-    function toggleCRT() {
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        modeBtn.textContent = 'green mode';
-      }
-      playClickSound();
-    }
-
-    function playClickSound() {
-      const sound = document.getElementById('click-sound');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
-    }
-
-    document.addEventListener('click', () => {
-      playClickSound();
-    });
-  </script>
 </body>
 </html>
+

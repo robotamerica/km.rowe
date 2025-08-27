@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,8 +14,21 @@
       padding: 0;
       overflow: hidden;
     }
-    body.blue-mode { color: #aaf0ff; }
-    body.green-mode { color: #9aff9a; }
+    /* site-wide mode alignment */
+    body.alt-mode { color: #aaf0ff; }   /* cyan/blue */
+    body.crt-mode { color: #00ff8b; }   /* green */
+    body.epaper-mode {
+      background: #f6f6f1 !important;
+      color: #1a1a1a !important;
+    }
+    body.epaper-mode .book-box {
+      background: #fbfbf8 !important;
+      color: #1a1a1a !important;
+      border-color: #aaa !important;
+      box-shadow: none !important;
+    }
+    body.epaper-mode .cover { background: #f6f6f1 !important; }
+
     .toolbar {
       position: fixed;
       top: 10px;
@@ -112,13 +124,37 @@
       display: block;
       text-align: center;
     }
+    @media screen and (max-width: 600px) {
+      .toolbar {
+        top: 5px;
+        right: 5px;
+        flex-direction: column;
+      }
+      .button {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .book-box {
+        padding: 1rem;
+        height: 55vh;
+      }
+      .cover pre {
+        font-size: 0.8rem;
+      }
+      .poem-title {
+        font-size: 1.2rem;
+      }
+    }
   </style>
 </head>
-<body class="blue-mode">
+<body class="alt-mode">
   <div class="toolbar">
-    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" id="modeToggle">green mode</button>
     <button class="button" onclick="exitPage(event)">exit</button>
   </div>
+
+  <!-- click sound -->
+  <audio id="click-sound" src="/assets/click.wav" preload="auto"></audio>
 
   <div class="cover" onclick="startBook()">
     <pre id="mirror">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -179,7 +215,7 @@
       const stanza = stanzas[current];
       document.getElementById('stanzaBox').innerHTML =
         `<span class="poem-title">${stanza.title}</span>` +
-        stanza.body.replace(/\n/g, '<br>');
+        stanza.body.replace(/\\n/g, '<br>');
       document.getElementById('pageIndicator').textContent =
         `Page ${current + 1} of ${stanzas.length}`;
     }
@@ -190,21 +226,6 @@
 
     function prevStanza() {
       if (current > 0) { current--; renderStanza(); }
-    }
-
-    function toggleMode(event) {
-      event.stopPropagation();
-      const body = document.body;
-      const button = event.target;
-      if (body.classList.contains("blue-mode")) {
-        body.classList.remove("blue-mode");
-        body.classList.add("green-mode");
-        button.textContent = "blue mode";
-      } else {
-        body.classList.remove("green-mode");
-        body.classList.add("blue-mode");
-        button.textContent = "green mode";
-      }
     }
 
     function exitPage(event) {
@@ -227,5 +248,8 @@
       if (e.key === 'ArrowLeft') prevStanza();
     });
   </script>
+
+  <!-- shared mode logic -->
+  <script src="/mode.js"></script>
 </body>
 </html>
