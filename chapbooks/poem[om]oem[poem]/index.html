@@ -14,6 +14,21 @@
       padding: 0;
       overflow: hidden;
     }
+    /* site-wide mode alignment */
+    body.alt-mode { color: #aaf0ff; }   /* cyan/blue */
+    body.crt-mode { color: #00ff8b; }   /* green */
+    body.epaper-mode {
+      background: #f6f6f1 !important;
+      color: #1a1a1a !important;
+    }
+    body.epaper-mode .book-box {
+      background: #fbfbf8 !important;
+      color: #1a1a1a !important;
+      border-color: #aaa !important;
+      box-shadow: none !important;
+    }
+    body.epaper-mode .cover { background: #f6f6f1 !important; }
+
     .toolbar {
       position: fixed;
       top: 10px;
@@ -31,8 +46,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .blue-mode { color: #aaf0ff; }
-    .green-mode { color: #9aff9a; }
     .cover {
       position: fixed;
       inset: 0;
@@ -79,6 +92,17 @@
       background: rgba(0, 0, 0, 0.9);
       box-shadow: 0 0 20px currentColor;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: currentColor black;
+    }
+    .book-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .book-box::-webkit-scrollbar-thumb {
+      background-color: currentColor;
+    }
+    .book-box::-webkit-scrollbar-track {
+      background: transparent;
     }
     .page-buttons {
       display: flex;
@@ -94,7 +118,15 @@
       width: 100%;
       margin-top: 1rem;
     }
+    .poem-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+
     @media screen and (max-width: 600px) {
+
       .toolbar {
         top: 5px;
         right: 5px;
@@ -117,11 +149,14 @@
     }
   </style>
 </head>
-<body class="blue-mode">
+<body class="alt-mode">
   <div class="toolbar">
-    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" id="modeToggle">green mode</button>
     <button class="button" onclick="exitPage(event)">exit</button>
   </div>
+
+  <!-- click sound -->
+  <audio id="click-sound" src="/assets/click.wav" preload="auto"></audio>
 
   <div class="cover" onclick="startBook()">
     <pre id="mirror">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄
@@ -219,5 +254,6 @@ by kevin m rowe
       if (e.key === 'ArrowLeft') prevStanza();
     });
   </script>
+    <script src="/mode.js"></script>
 </body>
 </html>
