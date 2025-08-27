@@ -17,9 +17,9 @@
       <a href="../blog.html">blog</a>
       <a href="../links.html">links</a>
     </nav>
-    <button class="toggle-mode" onclick="toggleCRT()">green mode</button>
+    <button class="toggle-mode" id="modeToggle">green mode</button>
   </header>
-
+  <audio id="click-sound" src="assets/click.wav" preload="auto"></audio>
   <main>
     <h1>Hello World</h1>
     <blockquote>
@@ -39,39 +39,6 @@ come together is being.</p>
 <p>km.rowe (aka km.nada)</p>
 
   </main>
-
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.querySelector('.toggle-mode');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
-
-    function toggleCRT() {
-      const body = document.body;
-      const btn = document.querySelector('.toggle-mode');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        btn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        btn.textContent = 'green mode';
-      }
-    }
-  </script>
+  <script src="../mode.js"></script>
 </body>
 </html>

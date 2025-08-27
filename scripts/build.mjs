@@ -26,7 +26,7 @@ const template = (title, body) => `<!DOCTYPE html>
       <a href="../blog.html">blog</a>
       <a href="../links.html">links</a>
     </nav>
-    <button class="toggle-mode" onclick="toggleCRT()">green mode</button>
+    <button class="toggle-mode" id="modeToggle">green mode</button>
   </header>
 
   <main>
@@ -34,39 +34,8 @@ const template = (title, body) => `<!DOCTYPE html>
     ${body}
   </main>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.querySelector('.toggle-mode');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
-
-    function toggleCRT() {
-      const body = document.body;
-      const btn = document.querySelector('.toggle-mode');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        btn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        btn.textContent = 'green mode';
-      }
-    }
-  </script>
+  <!-- site-wide alt/crt/epaper handling -->
+  <script src="/mode.js"></script>
 </body>
 </html>`;
 
@@ -89,17 +58,22 @@ const indexTemplate = (category, posts) => `<!DOCTYPE html>
       <a href="../blog.html">blog</a>
       <a href="../links.html">links</a>
     </nav>
+    <button class="toggle-mode" id="modeToggle">green mode</button>
   </header>
+
   <main class="post-list" style="max-width: 700px; margin: auto; padding: 2rem;">
     <h2>${category}</h2>
     ${posts.map(p => `
       <article>
-        <h3><a href="${p.file.replace('.md', '.html')}" target="_blank">${p.title}</a></h3>
+        <h3><a href="${p.file.replace('.md', '.html')}">${p.title}</a></h3>
         <p>${p.description}</p>
       </article>`).join('\n')}
   </main>
+
+  <script src="/mode.js"></script>
 </body>
 </html>`;
+
 
 const posts = [];
 
