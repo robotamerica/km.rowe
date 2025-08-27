@@ -6,30 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <style>
-    /* ===== Base / inherit site modes ===== */
     html, body {
       background: black;
-      color: #aaf0ff; /* default = alt-mode look */
+      color: #aaf0ff;
       font-family: 'VT323', monospace;
       margin: 0;
       padding: 0;
       overflow: hidden;
     }
-    /* align with site palettes */
-    body.alt-mode { color: #aaf0ff; }   /* cyan/blue */
-    body.crt-mode { color: #00ff8b; }   /* green */
-    body.epaper-mode {
-      background: #f6f6f1 !important;
-      color: #1a1a1a !important;
-    }
-    body.epaper-mode .book-box {
-      background: #fbfbf8 !important;
-      color: #1a1a1a !important;
-      border-color: #aaa !important;
-      box-shadow: none !important;
-    }
-    body.epaper-mode .cover { background: #f6f6f1 !important; }
-
+    body.blue-mode { color: #aaf0ff; }
+    body.green-mode { color: #9aff9a; }
     .toolbar {
       position: fixed;
       top: 10px;
@@ -67,7 +53,9 @@
       line-height: 1.2;
       padding: 0 10px;
     }
-    .crack { animation: shatter 1.2s ease-in-out forwards; }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
     @keyframes shatter {
       0% { transform: scale(1) rotate(0deg); opacity: 1; }
       100% { transform: scale(3) rotate(720deg); opacity: 0; }
@@ -94,10 +82,15 @@
       scrollbar-width: thin;
       scrollbar-color: currentColor black;
     }
-    .book-box::-webkit-scrollbar { width: 6px; }
-    .book-box::-webkit-scrollbar-thumb { background-color: currentColor; }
-    .book-box::-webkit-scrollbar-track { background: transparent; }
-
+    .book-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .book-box::-webkit-scrollbar-thumb {
+      background-color: currentColor;
+    }
+    .book-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
     .page-buttons {
       display: flex;
       justify-content: center;
@@ -118,21 +111,25 @@
       display: block;
       text-align: center;
     }
-
     @media screen and (max-width: 600px) {
-      .toolbar { flex-direction: column; gap: 0.5rem; top: 5px; right: 5px; }
-      .book-box { height: 50vh; padding: 1rem; }
+      .toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+        top: 5px;
+        right: 5px;
+      }
+      .book-box {
+        height: 50vh;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
-<body class="alt-mode">
+<body class="blue-mode">
   <div class="toolbar">
-    <button class="button" id="modeToggle">green mode</button>
+    <button class="button" onclick="toggleMode(event)">green mode</button>
     <button class="button" onclick="exitPage(event)">exit</button>
   </div>
-
-  <!-- click sound (root-relative; adjust if your assets path differs) -->
-  <audio id="click-sound" src="/assets/click.wav" preload="auto"></audio>
 
   <div class="cover" onclick="startBook()">
     <pre id="mirror">⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣤⣤⣀⠀⠀⠀⠀⠀⠀
@@ -174,7 +171,7 @@
       const stanza = stanzas[current];
       document.getElementById('stanzaBox').innerHTML =
         `<span class="poem-title">${stanza.title}</span>` +
-        stanza.body.replace(/\\n/g, '<br>');
+        stanza.body.replace(/\n/g, '<br>');
       document.getElementById('pageIndicator').textContent =
         `Page ${current + 1} of ${stanzas.length}`;
     }
@@ -183,6 +180,20 @@
     }
     function prevStanza() {
       if (current > 0) { current--; renderStanza(); }
+    }
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
     }
     function exitPage(event) {
       event.stopPropagation();
@@ -202,8 +213,5 @@
       if (e.key === 'ArrowLeft') prevStanza();
     });
   </script>
-
-  <!-- shared mode logic -->
-  <script src="/mode.js"></script>
 </body>
 </html>

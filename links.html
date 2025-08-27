@@ -79,52 +79,9 @@
     </section>
   </main>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedMode = localStorage.getItem('mode');
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      if (savedMode === 'crt-mode') {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        if (modeBtn) modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        if (modeBtn) modeBtn.textContent = 'green mode';
-      }
-    });
 
-    function toggleCRT() {
-      const body = document.body;
-      const modeBtn = document.getElementById('modeToggle');
-      const isAlt = body.classList.contains('alt-mode');
-      if (isAlt) {
-        body.classList.remove('alt-mode');
-        body.classList.add('crt-mode');
-        localStorage.setItem('mode', 'crt-mode');
-        modeBtn.textContent = 'blue mode';
-      } else {
-        body.classList.remove('crt-mode');
-        body.classList.add('alt-mode');
-        localStorage.setItem('mode', 'alt-mode');
-        modeBtn.textContent = 'green mode';
-      }
-      playClickSound();
-    }
+  <script src="mode.js"></script>
 
-    function playClickSound() {
-      const sound = document.getElementById('click-sound');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
-    }
-
-    document.addEventListener('click', () => {
-      playClickSound();
-    });
-  </script>  
 </body>
 </html>
 
