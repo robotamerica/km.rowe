@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>caña y camarón – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body.blue-mode { color: #aaf0ff; }
+    body.green-mode { color: #9aff9a; }
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: currentColor black;
+    }
+    .book-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .book-box::-webkit-scrollbar-thumb {
+      background-color: currentColor;
+    }
+    .book-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .poem-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+    @media screen and (max-width: 600px) {
+      .toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+        top: 5px;
+        right: 5px;
+      }
+      .book-box {
+        height: 50vh;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣤⣤⣀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⢀⣀⡙⠻⢶⣶⣦⣴⣶⣶⣶⠾⠛⠛⠋⠉⠉⠉⠉⠙⠃⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠉⠉⠙⠛⠛⠋⠉⠉⠡⣤⣴⣶⣶⣾⣿⣿⣿⣛⣩⣤⡤⠖⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⢠⣴⣾⠂⣴⣦⠈⣿⣿⣿⣿⣿⣿⠿⠛⣋⠁⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⢀⣼⣿⣶⣄⡉⠻⣧⣌⣁⣴⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣦⡈⢻⣿⣿⣿⣿⡿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⡀⢻⣿⣿⣿⣿⣿⣿⣿⡄⠙⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⢠⣷⣄⡉⠻⢿⣿⣿⣿⠏⠠⢶⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⢸⣿⣿⣿⣶⣤⣈⠙⠁⠰⣦⣀⠉⠻⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠘⢿⣿⣿⣿⣿⣿⡇⠠⣦⣄⠉⠳⣤⠈⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⢠⣌⣉⡉⠉⣉⡁⠀⠀⠙⠗⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠹⢿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⠟⢀⣤⡀⠀⠀⠀⠀⠀⠀⣀⣀⣠⣤⣤⣤⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠿⠿⡿⠂⣀⣠⣤⣤⣤⣀⣉⣉⠉⠉⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠛⠛⠛⠛⠋⠉⠉⠁⠀⠀⠀⠀</pre>
+    <h1>caña y camarón</h1>
+    <h2>km rowe</h2>
+    <h3>traducción y consejo espiritual por marisol castañeda corona</h3>
+    <p><em>click the shrimp to begin</em></p>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+    const stanzas = [{"title": "page 1", "body": "ever so grateful to marisol castañeda corona for her help making magic from my rudimentary spanish and her unwavering moral support//estoy agradecido por la ayuda de marisol castañeda corona para hacer magia con mi español rudimentario y su incondicional apoyo moral."}, {"title": "page 2", "body": "caña dulce y jobo—los pescadores en sus lanchas por la mañana y las lluvias convierten las calles en riachuelos, la casita rosa de la esquina huele a café recién hecho."}, {"title": "page 3", "body": "sweet sugarcane and hog plum—the fishermen on their boats in the morning and the rains change the streets into small rivers, the smell of fresh coffee coming from the tiny pink house on the corner."}, {"title": "page 4", "body": "tlacotalpan solitario, el día avanza lentamente pero llegamos en la noche borrachos de ron y canciones. cantamos al río rebosantes de camarones y pescado."}, {"title": "page 5", "body": "lonely tlacotalpan, the day moves slowly but we arrive in the night drunk on rum and song. we sing the river fat with shrimp and fish."}, {"title": "page 6", "body": "los cuclillos cantan cucú y danzan en sus árboles cuyas ramas cosquillean al aire y se inclinan al ritmo lento de las aguas del río."}, {"title": "page 7", "body": "the cuckoo birds sing cuckoo and dance in their trees whose branches tickle the air or droop into the slow rhythm of the river's water."}, {"title": "page 8", "body": "así suena el arpa en tlacotalpan. dedos haciendo eco por las callejuelas. un rayo que cae, catarsis vestida de blanco. un sombrero de palma girando por el zócalo como una planta rodadora. escuchamos la música, una radio de hojalata en la distancia."}, {"title": "page 9", "body": "this is how the harp sounds in tlacotalpan. fingers echo down the tiny back streets. lightning strike, catharsis dressed in white. a palm-woven hat rolls through the square like a tumbleweed. we hear the music, a distant tin can radio."}, {"title": "page 10", "body": "caña y camarones sepáranos de las nubes. comida y pirotecnia, música y amor. dulce criatura rosa, ya verás. fermento y destilación. bébenos hasta no tener más sed. lancha y remo, la madera buena hace percusión. nadan hasta la orilla."}, {"title": "page 11", "body": "sugarcane and shrimp, call us apart from the clouds. food and pyrotechnics, music and love. sweet pink creatures and you'll see. ferment and distil. drink us until we ain't thirsty no more. boat and oar, percussive makes for good wood. they swim to the shore."}, {"title": "page 12", "body": "señor laudero, hágame una jarana del árbol sagrado. hágalo con la forma de dios. los jarochos fantasmales tocan al ritmo del fandango. hermosa morena con su vestido blanco. los pies como el trueno. la morena me dijo que por feo no me quería. pero sólo soy feo cuando estoy separado de ella. ella trenza la noche en su pelo y yo siempre me pierdo en la oscuridad."}, {"title": "page 13", "body": "kind luthier, make me a jarana from the holy tree. make it in the shape of god. the musicians play the fandango. beautiful dark-haired woman, in her white dress. her feet like thunder. one day the dark-haired woman told me she couldn't love me because i am ugly. but i am only ugly when i am apart from her. she braids the night into her hair. i am easily lost in the dark."}, {"title": "page 14", "body": "cántame candelaria y embelléceme papaloapan. me baño bajo el cielo espejado como chalchiuhtlicue atrayendo la abundancia para compartir. el amor compartido en forma de pez color puesta de sol. la tristeza compartida como el sabor de la sal de mar. la felicidad compartida en forma de pelota en el aire. reímos y corremos junto a los toros, nos convertimos en animales felices."}, {"title": "page 15", "body": "sing me candelaria and pretty me papaloapan.   i bathe under the mirrored sky like  chalchiuhtlicue wanting for abundance to share. sharing love in the form of a fish the colour of sunset. sharing sadness the flavour of the salty sea. sharing happiness in the shape of a ball in the air. laughing and running alongside the bulls, we become happy animals."}, {"title": "page 16", "body": "caña de azúcar quemada, el campesino afila su machete. el músico afina su requinto. paliacate rojo al cuello. voz cristalina como el agua mientras los pescadores remiendan y tejen sus redes."}, {"title": "page 17", "body": "burnt sugarcane, the farmer sharpens his machete. the musician tunes his requinto jarocho. red bandana around his neck. bright voice clear as the water as the fishermen mend and weave their nets."}, {"title": "page 18", "body": "acompáñame en las orillas de la razón. deja que la corriente me tome con brazos abiertos. ¿serías caña y camarón? no estoy solo.ven y conviértete conmigo. un río, un pueblo, la tierra y el cielo. mil casas pintadas de mil colores del sol. un sillón tlacotalpeño en la calle. mamá teje chismes. reímos y comemos. el día llega a su fin. dormimos entre peces que se convierten en estrellas. el río es nuestra cobija. dulces sueños de caña y camarones."}, {"title": "page 19", "body": "accomplice with me on the shores of reason. let the current take me with open arms. can you caña and camarón? i am not alone. come become with me. a river, town, the land and the sky. a thousand houses painted a thousand colours of the sun. a rocking chair in the street. mother knits gossip. we laugh and eat. the day comes to an end. we sleep like fish turning into stars. the river is our blanket. sweet dreams of sugarcane and shrimp."}];
+    let current = 0;
+    function renderStanza() {
+      const stanza = stanzas[current];
+      document.getElementById('stanzaBox').innerHTML =
+        `<span class="poem-title">${stanza.title}</span>` +
+        stanza.body.replace(/\n/g, '<br>');
+      document.getElementById('pageIndicator').textContent =
+        `Page ${current + 1} of ${stanzas.length}`;
+    }
+    function nextStanza() {
+      if (current < stanzas.length - 1) { current++; renderStanza(); }
+    }
+    function prevStanza() {
+      if (current > 0) { current--; renderStanza(); }
+    }
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
+    }
+    function exitPage(event) {
+      event.stopPropagation();
+      window.location.href = "/";
+    }
+    function startBook() {
+      const mirror = document.getElementById('mirror');
+      mirror.classList.add('crack');
+      setTimeout(() => {
+        document.querySelector('.cover').style.display = 'none';
+        document.getElementById('reader').style.display = 'flex';
+        renderStanza();
+      }, 1200);
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextStanza();
+      if (e.key === 'ArrowLeft') prevStanza();
+    });
+  </script>
+</body>
+</html>

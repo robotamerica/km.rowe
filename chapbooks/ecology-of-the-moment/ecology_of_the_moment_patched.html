@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ecology of the moment – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body.blue-mode { color: #aaf0ff; }
+    body.green-mode { color: #9aff9a; }
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: currentColor black;
+    }
+    .book-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .book-box::-webkit-scrollbar-thumb {
+      background-color: currentColor;
+    }
+    .book-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .poem-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+        @media screen and (max-width: 600px) {
+      .toolbar {
+        top: 5px;
+        right: 5px;
+        flex-direction: column;
+      }
+      .button {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .book-box {
+        padding: 1rem;
+        height: 55vh;
+      }
+      .cover pre {
+        font-size: 0.8rem;
+      }
+      .poem-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⢰⣆⠀⢿⢢⡀⠸⣱⡀⢀⢤⡶⡄⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⢰⣤⡴⣴⠢⣧⣿⢤⣈⠺⡧⣺⠷⡟⠓⠃⣇⢧⣶⣀⠀⠀⠀⠀⠀⠀
+      ⠀⢀⡀⢠⠽⣇⣹⠓⠽⡌⠓⠹⢶⢿⠀⢠⠁⡈⡶⠓⠋⠙⢻⡹⢓⡶⠀⠀⠀
+      ⠀⣬⣿⡎⠓⠒⠻⢄⡀⢳⡀⠀⢸⠈⢦⢸⠀⣸⢇⠀⢀⣠⡞⢉⣡⣴⣲⠄⠀
+      ⢠⣽⣈⣇⣴⣲⠖⠀⠉⠚⠳⣄⢸⠀⠈⣿⠊⡼⡦⢏⠉⠀⠉⢙⠮⢱⡆⠀⠀
+      ⠘⢎⡇⠘⢧⡀⣀⣤⣤⠄⠀⠈⢻⣇⢀⣽⠖⢣⣣⡤⠤⠒⠚⣝⣆⠀⠀⠀⠀
+      ⠀⠀⠓⠢⠤⠽⢧⣀⠀⠀⠀⠀⠀⣿⠏⢹⡴⠋⠙⠒⠶⢖⢤⡀⢀⣤⣶⠗⠀
+      ⡢⢄⠐⠮⠷⢆⠀⠈⠙⠛⠛⠻⢶⣿⠀⣾⢀⣀⣀⣤⠤⡼⡓⢋⣿⠫⢕⡆⠀
+      ⠈⣻⠧⠤⠤⠤⠿⠗⠒⠒⠛⠶⣤⣿⣼⠛⠉⠙⠒⣶⡖⠳⡗⠺⡿⣤⣤⢄⡀
+      ⠰⣹⠀⠀⠀⢟⡆⠀⠀⠀⠀⠀⠈⣿⡿⠀⠀⠀⠀⢧⠇⠀⠀⠀⠀⠙⠮⡯⠀
+      ⠀⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣤⠾⠛⣿⠙⠛⠶⢦⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀</pre>
+    <h1>ecology of the moment</h1>
+    <h2>by kevin m rowe</h2>
+    <p><em>click the tree to begin</em></p>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+    const stanzas = [
+      {"title": "forest moment", "body": "there are colours here\nand shapes, all sorts of sizes, oh\nand smells—sharp smells and deep smells\nthe kind that are the result of your moving feet\nall crunchy pine needles\nand soft moss and the sound of water\nall those things the colour of forest\n all those things the sound of trees\nall those things the feeling of loneliness\nwithout being lonely\nwe make house shapes with the forest\nwe make shapes like home or shapes like lost\nwithout being lost\nbecause being lost is impossible here,\n in the ecology of the moment\nwhere time is concentric circles\n made around the marrow of each long breath."},
+      {"title": "lake moment", "body": "lakeside and idle-wise\nall the shape of water and\nthe colour of mirror\nall skyward and wise words\n all insect captain, ant on a leaf\nall grasshoppers as bait and\nbrown trout on the line\nyep, a shy guy and a fish fry\ndon't forget the skillet\nbetter with butter\nlet me leap into the lake\nlet me swim under blue sky\nlet me lure little fish\nlet me lakeside laze\nif not fishing, lying in\nthe hammock just moving\nwith the easy afternoon breeze."},
+      {"title": "desert moment", "body": "busy me biznaga\nmy dusty footprints\nblood moon at\nwitches rock, all\nblack wool and white salt\nwe whip in the wind\nwe wander and water lust\ndesert birds on\nburros back, and\ndry chiles and desert flowers\nthe purple and red evening\ndivided by an adobe wall\nthis side is ours, by the\nold crumbling church, we\nmake tortillas the colour of the sun\nwe make living shapes\nsome form of puppetry\nan odd number of knives to forks,\n the pantry is empty\n except for a can of beans\n and our bed is full of sand."},
+      {"title": "hillside moment", "body": "adiós azucenca\nholding onto the hillside\ntelling nighttime stories\npretending the stars\npulling light towards\nyour tiny little hearts\nwhere hillside histories\nhurry downhill, children\nchasing a lizard\ngrandmother left her\nscarf in the tree, white\npatterns embroidered in\nwhite wool, not a flag\nof surrender but a\nwoven dream\nwe wild like rivers\nwe worldly creatures\nleaving our words\nin holes on the hillside."},
+      {"title": "city moment", "body": "so much cement\nso the climate\nis so different\nand although we are\nbeautiful, and\nthe city is too\nwe might remember\nthe desert, we might\nremember the slow day\nwe might recall the\ntime we recoiled at home\nthe earthquake knocking\nat the door\nand this city is a costume\nwe all like to wear, we\ndrink our money here\nwe stand in lines\nwe plant sad gardens\nwe brag the city\nthough it doesn't seem to\ncare about us in return."},
+      {"title": "prairie moment", "body": "grow me up\ngrasslands\neither green\nnor golden\neither wind\nnor rain\nor maybe\ngas and oil\nred-breasted\nrobins on pumpjacks\ngreen wooden\ngrain elevators\nrusting old\ntrain cabooses\non a black iron bridge\nabove the frozen river\nwrite me or rot me\ni was raised like a barn\namong tiny yellow flowers\n on a roadside mustard seed farm."},
+      {"title": "river moment", "body": "ripen me riparian\nor carry me current\nand currently, i am\noxbow lake, lately\nabandoned after\nmeaningfully meandering\nmy boots are full of mud\nskin pocked by\nmosquito bites\nbarely enough time\nto take another breath\nbefore under we go\nwith the undertow\nand the river carries\nme strong, and i wear\nthe river and it is\naware of me, birds\nmake trumpets and\na dog plays near\nthe shore by the\nwillow trees, i am\nwith water and it\nholds me, and the\nfly fishermen make\ncowboy shapes as\ni drift by, always\ndrifting until the\nriver runs dry."},
+      {"title": "tundra moment", "body": "bore me boreal\nand that is why\nyou must end\nbut believe me\nbetter with\nborealis or berries\ninto jam, just\nliken me to lichen\nand grow me on a rock\ngrow me green\nor grow me and\nthrow me, all\ntender me tundra\nhowl like a wolf\ntender me between\nmoon and earth\ntender me tundra\nas tempting as it is\nmake my body a\ntemple, buried beneath\nthe rocks all airy and alpine\nall treeless after trapline\nsaxifrage and lupine."},
+      {"title": "valley moment", "body": "volley me valley\nfrom mountainside\nto mountainside\nsupposed to be\na prairie boi\nbut no longer\nlook for me in\nvalleys be they\nyellow or green\ntempt me tendril\nand we will climb\nthe cathedral wall\ntogether, we will\ndrink from the well\nwe will dance with\nthe grasses and\ncollect insects and\ndraw in the dirt\nwith our fingers\nlittle circles always\nlittle circles."},
+      {"title": "animal moment", "body": "animate me animal\nnot so amicable\na million mammals\nmaking sound\nand i am drawn\nthe way you see\nme, drawn to you\na person like you\na person like me."},
+      {"title": "rancher moment", "body": "write a poem\nor ride it, and\ni will be inside it\nevery word, every sound\nrighteously ranchero\nbut don't get me wrong\ni don't write poems\ni don't speak em,\nbut some folk they\nseek them, and\nif i may i might\ni may just sing for you\na tin can cowboi’s song\nleather boots en denim,\nplaid that way is that\nwhisky or just me and\na buckskin hat\nrancour me rancher\na pitchfork a painter\nnot poet, not writer."},
+      {"title": "astro moment", "body": "too many stars\nand too many poems\nabout them\nand too many words\nto confuse and go on then\nno more poems\njust chants and\nchants will be\na chance for you\na chance for me\nwe colour the\nconscious all cosmic\nand nauseous\nwe spin at 460\nmeters a second\nsorry not sorry\nanother little\nspace story\nastro or astray\ni am here to stay."}
+    ];
+
+    let current = 0;
+
+    function renderStanza() {
+      const stanza = stanzas[current];
+      document.getElementById('stanzaBox').innerHTML =
+        `<span class="poem-title">${stanza.title}</span>` +
+        stanza.body.replace(/\n/g, '<br>');
+      document.getElementById('pageIndicator').textContent =
+        `Page ${current + 1} of ${stanzas.length}`;
+    }
+
+    function nextStanza() {
+      if (current < stanzas.length - 1) { current++; renderStanza(); }
+    }
+
+    function prevStanza() {
+      if (current > 0) { current--; renderStanza(); }
+    }
+
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
+    }
+
+    function exitPage(event) {
+      event.stopPropagation();
+      window.location.href = "/";
+    }
+
+    function startBook() {
+      const mirror = document.getElementById('mirror');
+      mirror.classList.add('crack');
+      setTimeout(() => {
+        document.querySelector('.cover').style.display = 'none';
+        document.getElementById('reader').style.display = 'flex';
+        renderStanza();
+      }, 1200);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextStanza();
+      if (e.key === 'ArrowLeft') prevStanza();
+    });
+  </script>
+</body>
+</html>

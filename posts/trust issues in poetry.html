@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trust issues in poetry – km.rowe</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
+</head>
+<body class="alt-mode">
+  <div class="scanlines"></div>
+  <header>
+    <div class="logo blinking-cursor">km.rowe</div>
+    <nav>
+      <a href="../index.html">home</a>
+      <a href="../chapbooks.html">chapbooks</a>
+      <a href="../blog.html">blog</a>
+      <a href="../links.html">links</a>
+    </nav>
+    <button class="toggle-mode" onclick="toggleCRT()">green mode</button>
+  </header>
+
+  <main>
+    <h1>trust issues in poetry</h1>
+    <h1><strong>a poetic thought scape</strong> trust issues in poetry</h1>
+<p>we should exercise every faucet accessible to the imagination. more importantly, we should imagine exercising everything and anything that is not accessible to the imagination. that way, we have all our bases covered.</p>
+<p>brother went fishing with a lawnmower. a finger in the nose is a train in the tunnel. mother doesn&#39;t like mice or moths. sister is the silence after the thunder rumbles. father is an atlas.</p>
+<p>never trust a poet with good teeth. never trust a poet with a phd. never trust a poet who hasn&#39;t lied about reading baudelaire. never trust a poet who wasn&#39;t a marxist.</p>
+<p>two words can&#39;t be friends. words are not sentient. if they were, they would have overthrown us by now.</p>
+<p>if i asked gertrude (gerty) how to write, she&#39;d teach me to make the perfect soft-boiled egg. eggs + soldiers. it is hardly toast without butter. choke me cholesterol or chide me julia child + spank me with a wooden spoon.</p>
+<p>if porno or poetry, maybe just porno. though poetry can be a bedtime sport just as well. a park bench above the bow river, hands wet under pants and inside. steam from the river. steam from two mouths. steam from wet hands. the river will freeze over soon. </p>
+<p>never trust a poet who hasn&#39;t lied about going to paris or new york. </p>
+<p>line drying clothing is an art. shirts like reptile skin flutter in the wind. why does lemon mean clean?</p>
+<p>never trust a poet who hasn&#39;t almost lost a limb. </p>
+<p>never trust a parent who has never joked that their child was adopted. the barbecue dad is well equipped for everything except emotion. if words were meat, they would sizzle + smell real good. i&#39;d gladly pay you tuesday for a hamburger today.</p>
+<p>meet me on the other side of goodbye or maybe after michelada. never trust a poet who doesn&#39;t enjoy a good michelada. </p>
+<p>if you can&#39;t fix it with duct tape, you should ask yourself if it is worth buying. i&#39;ve read poetry that was planned obsolescence. never trust a poet who hasn&#39;t missed rent. </p>
+<p>some things, like family, aren&#39;t meant to be simple. i repeat myself to sound predictable, even though i am not, even though i am. i am just a collection of thoughts floating around an oddly shaped head. never trust a poet who reads descartes. never trust a poet who believes in god, unless poetry is god + god is dead.</p>
+
+  </main>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedMode = localStorage.getItem('mode');
+      const body = document.body;
+      const modeBtn = document.querySelector('.toggle-mode');
+      if (savedMode === 'crt-mode') {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        if (modeBtn) modeBtn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        if (modeBtn) modeBtn.textContent = 'green mode';
+      }
+    });
+
+    function toggleCRT() {
+      const body = document.body;
+      const btn = document.querySelector('.toggle-mode');
+      const isAlt = body.classList.contains('alt-mode');
+      if (isAlt) {
+        body.classList.remove('alt-mode');
+        body.classList.add('crt-mode');
+        localStorage.setItem('mode', 'crt-mode');
+        btn.textContent = 'blue mode';
+      } else {
+        body.classList.remove('crt-mode');
+        body.classList.add('alt-mode');
+        localStorage.setItem('mode', 'alt-mode');
+        btn.textContent = 'green mode';
+      }
+    }
+  </script>
+</body>
+</html>

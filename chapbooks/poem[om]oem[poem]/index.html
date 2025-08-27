@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>poem[oṃ]oem[poem] – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .blue-mode { color: #aaf0ff; }
+    .green-mode { color: #9aff9a; }
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+    .crack {
+      animation: shatter 1.2s ease-in-out forwards;
+    }
+    @keyframes shatter {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+    }
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    @media screen and (max-width: 600px) {
+      .toolbar {
+        top: 5px;
+        right: 5px;
+        flex-direction: column;
+      }
+      .button {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .book-box {
+        padding: 1rem;
+        height: 55vh;
+      }
+      .cover pre {
+        font-size: 0.8rem;
+      }
+      .poem-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body class="blue-mode">
+  <div class="toolbar">
+    <button class="button" onclick="toggleMode(event)">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="mirror">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠿⡰⢤⡚⡶⢤⠓⣹⠯⣷⡟
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⢢⡱⢦⡟⠳⣌⢳⠇⣼⡟⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣙⠦⢱⣳⣋⠳⣌⠟⣰⡟⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠦⡜⢢⣛⡶⢌⠓⡮⣽⡟⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⢯⡱⢍⢧⡻⣐⠮⢽⣡⡿⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⠋⡲⢍⠾⡼⣑⠮⣩⣳⡿⠁⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡿⣋⣽⢭⢯⣫⢵⢫⡽⢳⣿⠁⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡶⣿⢿⢑⡯⣫⢞⣜⠭⢪⡜⢁⣾⡿⠀⠀⠀⠀⠀⠀
+      ⢀⡄⠀⣀⠀⠀⠀⢀⣤⡶⣟⠭⢲⡡⢳⣫⠺⣼⠊⢰⡾⣫⣾⣿⠏⠀⠀⠀⠀⠀⠀⠀
+      ⠘⠻⠿⣷⣿⣶⡦⢭⣭⣍⣹⣼⢑⣧⣟⣲⡳⠯⣓⣵⡿⢋⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠉⠛⠻⢷⣦⣄⣸⡿⠻⣿⣿⣷⣶⣶⠟⠁⠀⣾⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⢈⣽⡟⠿⢶⣤⣌⡛⠛⠿⣷⣦⣼⣟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠙⢫⡼⠞⢖⡦⡎⢿⠿⣻⣾⣷⢾⡿⠿⣿⣶⣦⣄⡀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⢀⣤⣿⡶⠟⠛⠉⠀⠁⠉⠛⠙⣾⣯⠇⠀⠀⠀⣉⣽⣿⢿⣿⣶⣆⡀
+      ⠀⠀⠀⠀⠀⠀⢛⡟⠁⠀⠄⠀⠈⠀⠀⠀⠀⢰⣿⠁⣀⣤⣶⠿⠛⠉⠀⠀⠈⠉⠛⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣷⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+poem[oṃ]oem[poem]
+by kevin m rowe
+
+<em>click the chair to begin</em>
+    </pre>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" onclick="prevStanza()">← previous page</button>
+      <button class="button" onclick="nextStanza()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+    const stanzas = ["poem[o\u1e43]oem[poem]", "if there is water\nthere is beach\nif there is sky\nand ground\nor sea and sun \nthere is horizon\nif there are mountains\nthey like little broccoli heads\nif there are antenna\nthen invisible communication\nall about and abound ", "if there is sand \nthen sand goes in shoe\nor between pages of book\nor spit goes the oyster\nin pearl glow of day", "if there are blackbirds\ncrackle and caw ", "if the current is wet\nthen take us away", "first past the post\nlagoon or emerald coast\nwe wade wisely in the shallows", "if there is tree\nthen shade", "if there are trees \nthen shapes like combs\nor paint brushes ", "if there is wind \ncatch me here or there", "if there is beer\nseveral limes halved and squeezed", "it there are glasses \nplease let me read", "if there is language\nenglish or spanish\nlet me imagine words \nand words to describe\nsubaquatic says nature\nsquiggly or squirmy things\nsilver and scaly things", "bubbles\ndarkness\nbrightness\nblue \nblue-green\nnameless shades\nall liquid skin\nand mysterious", "if there are waves\nconstant sound \nsomewhere between\nwind and water\nsomewhere between\nold television at midnight\nor smartphone fuzz\nall intelligent\u2014we think\nall crafty creatures\u2014we believe\nbut brimming with bottomless ego\nwe wrong we wrong ", "if weather\nlet there be saint of climate\nwith chefs dying in this heat \ntoo hot in the kitchen\nkilling themselves for capital", "if bones\nunearth them as fossils\nit be nicer that way", "if smiles\nnot a dentist ad\nbut gappy happy\nyellow teeth", "left the toothbrush at home\nleft the cat alone \nleft the plants unwatered\u2014\nlet there be rain", "let there be children smarter than we\nlet there be animals we dare not eat\nlet there be bread\nwhen you let us eat cake\nlet there be leftovers\nwrapped on tinfoil or plastic wrap\nlet there be bottles and fill them with wine", "if pure sun\nthen maybe we will burn", "if salsa picante\nplease up the ante", "if red brick on shore\nplease build some more", "if there are buses\ntourists and plastic\nif there is palm\ncocoloco and fantastic", "if there is day\nlet there be night\nbut little binaries\nleave us too tight", "we are water\nand skin\nand hair\nand teeth\ntoo many holes\nnot to sink\nbarely aquatic\nbeach bums \nitchy sandfleas \ntrying to escape \nislands\nislands\nislands \noh boey\nor old bodies\nwe march \nin the blameless heat", "if hangnail\nlikely pain\nif astral awareness\nstargaze guide \nif red table\ndon't say coca\nif there is noon\nthere is somewhere after", "splendid swimmer\nor fisherman\nblue web of net \nlate for lagoon\ncrabs crafting burrows\nbut bird builds a nest \nnot nobody nowhere\nexcept all here and now\non big blue marble\nmoaning better beat the heat", "riptide en let it slide\njust let her take you\nand swim to the side\nfoam and fuzz\nand salty spray\nlegs burn\nlungs burn\nmouth full of saltwater\nskin stings \nmuscles tight\nears ring\nvibrating on shore with\nnear death kissy kisses\neverything shines\neverything sings", "but nothing makes one question mortality\nlike an unstable chair\nfrom six legs to none \nbetter buy me a saint\nsaint salt \nsaint sun\nor sand \nsaint sea\nor applaud the appalling apostle\napiary honey sucked starlight\ndripping red from\nblue blue sky\nbut science lies as much as\nreligion or poetry \ndepending on how you write it\ndepending on how you read it", "echo me ecology\nor empty me emberto \ndense attire written to wear\nrather than to be \na possibility\ni am wrong \nbut why you so pretty?", "if you don't adore the letter q\nthen who the fuck are you?", "if question\nmaybe answer\nor big kiss on mouth \nor constant consent\nor face the consequence", "we can wash yesterday off\nbut what of tomorrow", "if possibility\nbe aggressive\nbee-ee-agressive ", "if want none\nwonton soup and some ", "i am windbent\nwhiplash and whipperwheel\ntone or tone-deaf\npour a lil on the tombstone\ntalk to me toothsayer\non toffee thick tuesday\ntantamount to humidity\nwhich is very far from humility", "sweet or saltwater\na sweaty little story \nwater or animalcr\u00e6ft\nhands for pincers \nwalk a little sideways\nsnore when we drunk", "if there be floss\nlet it be candy\nlet it be blue\nor pink\nthe colour of sky\ndepending on what time it is", "we are lavender and lily\nworm or beechwood\ni am not known for\nthe number of fingers\nor toes i possess\nbut maybe i should be", "maybe i talk too much\nwhen i should listen", "maybe my shoulder is\nsore with age", "but if sandles \ndon't let me be toeless", "shade is important\nmostly when you need it", "we got ice\nall sorts of ice\nso long as it's cubed", "don't be fooled\nby these rocks i got\ni'm still kevvy from the block", "kevvy metal and other lead boots", "if tomorrow\nthen it's today", "if today\nit's no longer yesterday", "left money in my pocket before laundry\ni'm that kind of forgetful", "part with me palapa\npurpose like paella \nand pass the feelings by", "if prairie rose \nthen show me your hips\nbuilt bravely we machines\nlike tractor\nlike four by four\nshuck me an oyster\nor hock me a chuckwagon", "but we are near sea\nand somehow always above it", "cause & effect is a crocodile\nor a clock gone tick-tock\nbut now we got them phones\nsmart silent killers \nlike shark\nlike disease", "gertrude stein\nor seinfeld\ngot yer costanzas\nin meditation", "coral or correlate\nor collate the conditions\nthink of all the wonderful\nways we anthropomorphise\nthe incredible crustaceans\nor just make them edible", "if there is bait\nthere is fishing\ntackle and gear me\nor reel me in\ncloser to shore\nto perceive the pelican\nbrief as she dives\nbetter at fishing\nthan we are \nefficient & effective\nimitate and intonate\nwe've learned everything\nfrom natural nature", "give me a hand\nclap hands \nhand me a beer\nhandifolk on vacation", "i wrote but i can't poet", "proper poets\nteach at universities\nand have fancy degrees\nor host boring podcasts\nor have editors and publishers", "proper poets\ndon't eat fast food", "proper poets\nprobably don't eat tacos\nbecause proper poets \ngot class and grammar", "proper poets \nall got that same voice\nwhere did that come from?", "proper poetry\nis theft and don't\ndare tell me otherwise", "proper poets \nburn at the beach\nlobsters at the boil", "no proper poetry here\nor maybe, but that's contestable", "breakwater and levy it fast", "i am approximately\n75,000 enzymes strong \nwith a set of rattling teeth\nhungry for seafood", "came across \nbeach side conversation\nabout lorca:\nproper poets got good teeth\noral hygiene is important\nlorca had too many cavities\nteeth not white enough\nthat's why the facsists killed him", "maybe we better as \nspaghetti western?\nmaybe if we wander less\nand wonder more ...", "wick a wish a candlestick\nand pass me the tv dinner", "if sandcastle\nstudies architecture", "if young\nsmart\nanimalwise\nprime \na proper\nhome ", "if Instagram\nthen barely living", "two thumbs\nto keep the score", "if green\ni'd rather not kale\nkelp it together kevin", "if beach not enough\ndrive to the mountains\npurify me pine\njust don't enable me", "pry me another hour\nwith the crowbar of today\nand just like little fishies\ni'll swim to swim away.", "poempoem or pom pom\nalmost baby after prom prom", "all alberta boi\nor alpha centauri \ntriple eh beef\nground or chuck round\ni am impossible in too many ways", "i'm feeling driftwood\nstranded on beach\nor all log driver's waltz", "or just fresh cut pine\ngone birling down\nen down whitewater\nor just stepping lightly", "well opine the pinebeatle \nin ten words or less\ni double dare you", "please me prairie\nor leave me on the lark\ncelebrate the cephalopods\nor give em the goat", "we are a few tentacles \nshort of a rodeo \nbut we here anyway", "under sun\nin warm water\nlazy lagoon\ngusty gulf\nlow tide\nand bona fide", "if not veracruz\nthen where?", "happy in xalapa\nand fuck new york\npoets anyway ", "orchid or are you kidding me\ni've bloomed in much harsher places", "she be cut so\nstitch her with literature\nand pack my mouth with poems", "i am a catalogue of worn parts", "only mobile cause i can be\nand there is my privilege\nand it disgusts me", "sugerchide and gest me\npalm\u2014cane\u2014coconut\nall caffeine and sangre\nwe are only old as the\nlast story told", "and at this moment\nnone short nor tall\nnope i've none left for y'all", "but if a single cloud\nthen sing the moon to come\nsing sweet lil birdie\nsing the day is done."];
+    let current = 0;
+
+    function renderStanza() {
+      document.getElementById('stanzaBox').innerHTML = stanzas[current].replace(/\n/g, '<br>');
+      document.getElementById('pageIndicator').textContent = "Page " + (current + 1) + " of " + stanzas.length;
+    }
+
+    function nextStanza() {
+      if (current < stanzas.length - 1) {
+        current++;
+        renderStanza();
+      }
+    }
+
+    function prevStanza() {
+      if (current > 0) {
+        current--;
+        renderStanza();
+      }
+    }
+
+    function toggleMode(event) {
+      event.stopPropagation();
+      const body = document.body;
+      const button = event.target;
+      if (body.classList.contains("blue-mode")) {
+        body.classList.remove("blue-mode");
+        body.classList.add("green-mode");
+        button.textContent = "blue mode";
+      } else {
+        body.classList.remove("green-mode");
+        body.classList.add("blue-mode");
+        button.textContent = "green mode";
+      }
+    }
+
+    function exitPage(event) {
+      event.stopPropagation();
+      window.location.href = "/";
+    }
+
+    function startBook() {
+      const mirror = document.getElementById('mirror');
+      mirror.classList.add('crack');
+      setTimeout(() => {
+        document.querySelector('.cover').style.display = 'none';
+        document.getElementById('reader').style.display = 'flex';
+        renderStanza();
+      }, 1200);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextStanza();
+      if (e.key === 'ArrowLeft') prevStanza();
+    });
+  </script>
+</body>
+</html>
