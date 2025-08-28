@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>notes – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Site styles + fonts -->
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Minimal local styles just for the grid UI -->
+  <style>
+    /* Filters */
+    .notes-filters {
+      display: flex; gap: .5rem; flex-wrap: wrap;
+      padding: 1rem 2rem 0 2rem;
+    }
+    .notes-filters button {
+      background: transparent; border: 1px solid currentColor; cursor: pointer;
+      font-family: "IBM Plex Mono", monospace; padding: .35rem .8rem;
+    }
+
+    /* Table-like grid */
+    .notes-wrap { padding: 1rem 2rem 2rem 2rem; }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr 160px;
+      gap: 8px;
+      align-items: start;
+    }
+    .notes-row { display: contents; }
+    .notes-cell {
+      border: 1px dashed currentColor;
+      padding: .6rem .8rem;
+      word-break: break-word;
+      background: black;
+    }
+    .notes-heading .notes-cell { font-weight: bold; }
+    /* Responsive: stack on narrow screens */
+    @media (max-width: 760px) {
+      .notes-grid { grid-template-columns: 1fr; }
+      .notes-cell { border-left-width: 2px; }
+    }
+
+    /* E-paper adjustments (uses your existing mode classes) */
+    body.epaper-mode .notes-cell { background: #fbfbf8; border-color: #aaa; }
+  </style>
+
+  <!-- Optional Markdown rendering for entries (like your Almanac) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="alt-mode">
+  <div class="scanlines"></div>
+
+  <header>
+    <div class="logo blinking-cursor">km.rowe</div>
+    <nav>
+      <a href="index.html">home</a>
+      <a href="chapbooks.html">chapbooks</a>
+      <a href="notes.html">notes</a>
+      <a href="links.html">links</a>
+    </nav>
+    <button class="toggle-mode" id="modeToggle">green mode</button>
+  </header>
+
+  <div class="notes-filters">
+    <button data-filter="all">👀 all</button>
+    <button data-filter="notes">🌞 notes</button>
+    <button data-filter="reading">📚 reading</button>
+    <button data-filter="tools">🔧 tools</button>
+    <button id="randomBtn">🎲 random</button>
+  </div>
+
+  <main class="notes-wrap">
+    <div class="notes-grid" id="notesGrid" aria-live="polite">
+      <div class="notes-row notes-heading">
+        <div class="notes-cell">Date</div>
+        <div class="notes-cell">Entry</div>
+        <div class="notes-cell">Format</div>
+      </div>
+      <!-- rows injected here -->
+    </div>
+  </main>
+
+  <script>
+    // Lightweight renderer: loads notes.json and renders to the grid.
+    (async () => {
+      const grid = document.getElementById('notesGrid');
+      const btns = document.querySelectorAll('.notes-filters [data-filter]');
+      const randomBtn = document.getElementById('randomBtn');
+      marked.setOptions({ breaks: true });
+
+      let items = [];
+      try {
+        const res = await fetch('notes.json?ts=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        items = await res.json();
+      } catch (err) {
+        console.error(err);
+        grid.insertAdjacentHTML('beforeend', '<div class="notes-row"><div class="notes-cell" style="grid-column:1/-1">Could not load notes.json</div></div>');
+        return;
+      }
+
+      // newest first
+      items.sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+
+      const row = (note) => {
+        const date = note.date ? new Date(note.date).toLocaleDateString() : '';
+        const tag  = (note.tag || '').toLowerCase();
+        const fmt  = note.format || '';
+        const entryHtml = marked.parse(String(note.entry || ''));
+
+        return `
+          <div class="notes-row" data-tag="${tag}">
+            <div class="notes-cell">${date}</div>
+            <div class="notes-cell">${entryHtml}</div>
+            <div class="notes-cell">${fmt}</div>
+          </div>
+        `;
+      };
+
+      function render(list) {
+        // Remove old content except heading row (the first 3 cells)
+        Array.from(grid.querySelectorAll('.notes-row:not(.notes-heading)')).forEach(n => n.remove());
+        if (!list.length) {
+          grid.insertAdjacentHTML('beforeend', '<div class="notes-row"><div class="notes-cell" style="grid-column:1/-1">No notes.</div></div>');
+          return;
+        }
+        grid.insertAdjacentHTML('beforeend', list.map(row).join(''));
+      }
+
+      function filter(tag) {
+        if (tag === 'all') return render(items);
+        render(items.filter(n => (n.tag || '').toLowerCase() === tag));
+      }
+
+      // Initial render
+      render(items);
+
+      // Filters
+      btns.forEach(b => b.addEventListener('click', () => filter(b.dataset.filter)));
+
+      // Random
+      randomBtn.addEventListener('click', () => {
+        if (!items.length) return;
+        const pick = items[Math.floor(Math.random() * items.length)];
+        render([pick]);
+      });
+    })();
+  </script>
+
+  <script src="mode.js"></script>
+</body>
+</html>
