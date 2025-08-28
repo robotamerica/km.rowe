@@ -110,97 +110,85 @@
   </main>
 
   <script>
-    (async function () {
-  const grid = document.getElementById('post-grid');
-  if (!grid) {
-    console.warn('Missing #post-grid in blog.html');
-    return;
-  }
-
-  let allPosts = [];
-  try {
-    const res = await fetch('posts/posts.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const raw = await res.json();
-
-    // Normalize to .html (you removed the .md sources) and de-dupe by file
-    const byKey = new Map();
-    raw.forEach(p => {
-      const htmlName = String(p.file || '').replace(/\.md$/i, '.html');
-      const key = htmlName.toLowerCase();
-      byKey.set(key, { ...p, file: htmlName });
-    });
-
-    allPosts = Array.from(byKey.values())
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
-  } catch (err) {
-    console.error('Failed to load posts.json:', err);
-    grid.innerHTML = '<p>Unable to load posts right now.</p>';
-    return;
-  }
-
-  const urlFor = (p) => encodeURI(`posts/${p.file}`);
-
-  const cardFor = (p) => {
-    const card = document.createElement('div');
-    card.className = 'post-card';
-    card.dataset.category = (p.category || '').toLowerCase();
-
-    const dateStr = p.date ? new Date(p.date).toLocaleDateString() : '';
-    const url = urlFor(p);
-
-    card.innerHTML = `
-      <h3><a class="post-link" href="${url}">${p.title}</a></h3>
-      <time>${dateStr}</time>
-      <p>${p.description || ''}</p>
-    `;
-
-    // Make the whole card clickable, but don't double-trigger if the <a> is clicked
-    card.addEventListener('click', (e) => {
-      if (!(e.target instanceof HTMLAnchorElement)) {
-        window.location.href = url;
-      }
-    });
-
-    return card;
-  };
-
-  function render(list) {
-    grid.innerHTML = '';
-    list.forEach(p => grid.appendChild(cardFor(p)));
-  }
-
-  render(allPosts);
-
-  // Optional: live search (if you have an #search input)
-  const search = document.getElementById('search');
-  if (search) {
-    search.addEventListener('input', () => {
-      const q = search.value.toLowerCase();
-      const filtered = allPosts.filter(p =>
-        (p.title || '').toLowerCase().includes(q) ||
-        (p.description || '').toLowerCase().includes(q) ||
-        (p.category || '').toLowerCase().includes(q)
-      );
-      render(filtered);
-    });
-  }
-
-  // Optional: category filter (if you have a #categories container with [data-filter] buttons)
-  const categories = document.getElementById('categories');
-  if (categories) {
-    categories.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-filter]');
-      if (!btn) return;
-      const f = btn.getAttribute('data-filter');
-      const list = (f === 'all')
-        ? allPosts
-        : allPosts.filter(p => (p.category || '').toLowerCase() === f.toLowerCase());
-      render(list);
-    });
-  }
-})();
-  </script>
+    (() => {
+      const grid = document.getElementById('post-grid');
+      const catList = document.getElementById('category-list');
+      const sortSelect = document.getElementById('sortSelect');
+      if (!grid) return;
+    
+      let allPosts = [];
+    
+      const load = async () => {
+        try {
+          // Bust GH Pages cache to avoid stale JSON
+          const res = await fetch('posts/posts.json?ts=' + Date.now());
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const raw = await res.json();
+    
+          // Normalize: convert .md -> .html, de-dupe by file
+          const byKey = new Map();
+          for (const p of raw) {
+            const file = String(p.file || '').replace(/\.md$/i, '.html');
+            if (!file) continue;
+            byKey.set(file.toLowerCase(), { ...p, file });
+          }
+          allPosts = [...byKey.values()].filter(p => p.title && p.file);
+    
+          sortAndRender();
+          buildCategories();
+        } catch (err) {
+          console.error('Failed to load posts:', err);
+          grid.innerHTML = '<p>Unable to load posts right now.</p>';
+        }
+      };
+    
+      const sortAndRender = () => {
+        const dir = (sortSelect?.value || 'desc').toLowerCase();
+        const posts = [...allPosts].sort((a, b) => {
+          const ad = new Date(a.date || 0).getTime();
+          const bd = new Date(b.date || 0).getTime();
+          return dir === 'asc' ? ad - bd : bd - ad;
+        });
+        render(posts);
+      };
+    
+      const render = (list) => {
+        grid.innerHTML = list.map(p => {
+          const url = `posts/${encodeURI(p.file)}`;
+          const dateStr = p.date ? new Date(p.date).toLocaleDateString() : '';
+          const desc = p.description ? p.description : '';
+          return `
+            <article class="post-card" data-category="${(p.category||'').toLowerCase()}">
+              <h3><a class="post-link" href="${url}">${p.title}</a></h3>
+              <time>${dateStr}</time>
+              <p>${desc}</p>
+            </article>`;
+        }).join('');
+      };
+    
+      const buildCategories = () => {
+        if (!catList) return;
+        const cats = new Set(allPosts.map(p => (p.category || '').trim()).filter(Boolean));
+        const items = ['all', ...[...cats].sort((a,b) => a.localeCompare(b))];
+        catList.innerHTML = items.map(c =>
+          `<li><a href="#" data-cat="${c}">${c}</a></li>`).join('');
+    
+        catList.addEventListener('click', (e) => {
+          const a = e.target.closest('a[data-cat]');
+          if (!a) return;
+          e.preventDefault();
+          const c = a.getAttribute('data-cat');
+          const list = (c === 'all') ? allPosts
+            : allPosts.filter(p => (p.category || '').toLowerCase() === c.toLowerCase());
+          render(list);
+        });
+      };
+    
+      sortSelect?.addEventListener('change', sortAndRender);
+      load();
+    })();
+    </script>
+    
 <script src="mode.js"></script>
 
 </body>

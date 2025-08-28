@@ -1,28 +1,40 @@
 // scripts/watch.mjs
-import chokidar from 'chokidar';
-import { exec } from 'child_process';
+import fs from 'node:fs';
+import { spawn } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-console.log('👁️ Watching for changes in /posts/...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+const repoRoot   = path.resolve(__dirname, '..');
+const POSTS_DIR  = path.join(repoRoot, 'posts');
 
-const watcher = chokidar.watch('./posts/*.md', {
-  ignoreInitial: true
-});
+let timer = null;
+function debouncedBuild() {
+  clearTimeout(timer);
+  timer = setTimeout(runBuild, 150);
+}
 
-watcher.on('add', rebuild);
-watcher.on('change', rebuild);
-watcher.on('unlink', rebuild);
-
-function rebuild(filePath) {
-  console.log(`🔄 Rebuilding due to change in: ${filePath}`);
-  exec('node scripts/build.mjs', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`❌ Error: ${error.message}`);
-      return;
+function runBuild() {
+  const p = spawn(process.execPath, [path.join(repoRoot, 'scripts', 'build.mjs')], {
+    stdio: 'inherit',
+  });
+  p.on('exit', (code) => {
+    if (code === 0) {
+      console.log('Rebuilt successfully.');
+    } else {
+      console.error('Build failed with code', code);
     }
-    if (stderr) {
-      console.error(`⚠️ stderr: ${stderr}`);
-      return;
-    }
-    console.log(`✅ Build complete.\n`);
   });
 }
+
+fs.mkdirSync(POSTS_DIR, { recursive: true });
+console.log('Watching for changes in posts/*.md ...');
+
+fs.watch(POSTS_DIR, { persistent: true }, (eventType, filename) => {
+  if (!filename || !/\.md$/i.test(filename)) return;
+  debouncedBuild();
+});
+
+// initial build
+runBuild();
