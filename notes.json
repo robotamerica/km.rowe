@@ -1,21 +1,27 @@
 [
     {
-      "date": "2025-08-25",
-      "entry": "> Fresh water is the most valuable of all the resources…\n\n[DIY Rainwater Harvesting Ideas](https://gharpedia.com/blog/diy-rainwater-harvesting/)",
-      "format": "blog post",
-      "tag": "tools"
-    },
-    {
       "date": "2025-05-08",
       "entry": "[memo from a poet-technologist](/posts/memo-from-a-poet-technologist.html)",
-      "format": "internal link",
-      "tag": "notes"
+      "format": "blog post",
+      "tag": "reading"
+    },
+    {
+      "date": "2025-05-01",
+      "entry": "[technology and poetry](/posts/technology-and-poetry.html)",
+      "format": "blog post",
+      "tag": "reading"
     },
     {
       "date": "2025-04-02",
-      "entry": "[trust issues in poetry](/posts/trust issues in poetry.html)",
+      "entry": "[trust issues in poetry](/posts/trust-issues-in-poetry.html)",
       "format": "blog post",
-      "tag": "trust"
+      "tag": "reading"
+    },
+    {
+      "date": "2025-03-28",
+      "entry": "[hello world](/posts/hello-world.html)",
+      "format": "blog post",
+      "tag": "reading"
     }
   ]
   
