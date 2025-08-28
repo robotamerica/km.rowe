@@ -5,12 +5,7 @@
       "format": "blog post",
       "tag": "reading"
     },
-    {
-      "date": "2025-05-01",
-      "entry": "[technology and poetry](/posts/technology-and-poetry.html)",
-      "format": "blog post",
-      "tag": "reading"
-    },
+  
     {
       "date": "2025-04-02",
       "entry": "[trust issues in poetry](/posts/trust-issues-in-poetry.html)",
