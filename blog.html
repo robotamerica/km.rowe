@@ -110,130 +110,96 @@
   </main>
 
   <script>
-    let allPosts = [];
-    let currentSort = 'desc';
+    (async function () {
+  const grid = document.getElementById('post-grid');
+  if (!grid) {
+    console.warn('Missing #post-grid in blog.html');
+    return;
+  }
 
-    async function loadPosts() {
-      const res = await fetch('posts/posts.json');
-      const rawPosts = await res.json();
+  let allPosts = [];
+  try {
+    const res = await fetch('posts/posts.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
 
-      // Deduplicate by title + date
-      const seen = new Set();
-      const uniquePosts = rawPosts.filter(p => {
-        const key = `${p.title}|${p.date}`;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
+    // Normalize to .html (you removed the .md sources) and de-dupe by file
+    const byKey = new Map();
+    raw.forEach(p => {
+      const htmlName = String(p.file || '').replace(/\.md$/i, '.html');
+      const key = htmlName.toLowerCase();
+      byKey.set(key, { ...p, file: htmlName });
+    });
 
-      // Replace .md with .html
-      allPosts = uniquePosts.map(p => ({
-        ...p,
-        file: p.file.replace(/\.md$/, '.html')
-      }));
+    allPosts = Array.from(byKey.values())
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  } catch (err) {
+    console.error('Failed to load posts.json:', err);
+    grid.innerHTML = '<p>Unable to load posts right now.</p>';
+    return;
+  }
 
-      sortAndRender(currentSort);
-      buildCategorySidebar();
-    }
+  const urlFor = (p) => encodeURI(`posts/${p.file}`);
 
-    function buildCategorySidebar() {
-      const categories = Array.from(new Set(allPosts.map(p => p.category)));
-      categories.sort();
-      const catList = document.getElementById('category-list');
-      catList.innerHTML = '';
+  const cardFor = (p) => {
+    const card = document.createElement('div');
+    card.className = 'post-card';
+    card.dataset.category = (p.category || '').toLowerCase();
 
-      const allItem = document.createElement('li');
-      allItem.innerHTML = `<a onclick="filterPosts('all')">all</a>`;
-      catList.appendChild(allItem);
+    const dateStr = p.date ? new Date(p.date).toLocaleDateString() : '';
+    const url = urlFor(p);
 
-      categories.forEach(cat => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a onclick="filterPosts('${cat}')">${cat}</a>`;
-        catList.appendChild(li);
-      });
-    }
+    card.innerHTML = `
+      <h3><a class="post-link" href="${url}">${p.title}</a></h3>
+      <time>${dateStr}</time>
+      <p>${p.description || ''}</p>
+    `;
 
-    function sortAndRender(direction) {
-      currentSort = direction;
-      const sorted = [...allPosts].sort((a, b) => {
-        const da = new Date(a.date);
-        const db = new Date(b.date);
-        return direction === 'asc' ? da - db : db - da;
-      });
-      renderPosts(sorted);
-    }
+    // Make the whole card clickable, but don't double-trigger if the <a> is clicked
+    card.addEventListener('click', (e) => {
+      if (!(e.target instanceof HTMLAnchorElement)) {
+        window.location.href = url;
+      }
+    });
 
-    function sortPosts(order) {
-      sortAndRender(order);
-    }
+    return card;
+  };
 
-    function renderPosts(posts) {
-      const container = document.getElementById('post-grid');
-      container.innerHTML = '';
-      posts.forEach(post => {
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.setAttribute('draggable', true);
-        card.dataset.category = post.category;
-        card.innerHTML = `
-          <h3>${post.title}</h3>
-          <time>${post.date}</time>
-          <p>${post.description}</p>
-        `;
-        card.addEventListener('click', () => {
-          window.open(`posts/${post.file}`, '_blank');
-        });
-        container.appendChild(card);
-      });
-      enableDrag();
-    }
+  function render(list) {
+    grid.innerHTML = '';
+    list.forEach(p => grid.appendChild(cardFor(p)));
+  }
 
-    function filterPosts(category) {
-      const cards = document.querySelectorAll('.post-card');
-      cards.forEach(card => {
-        const isMatch = card.dataset.category === category;
-        if (category === 'all' || isMatch) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    }
+  render(allPosts);
 
-    function enableDrag() {
-      const cards = document.querySelectorAll('.post-card');
-      cards.forEach(card => {
-        card.addEventListener('dragstart', () => card.classList.add('dragging'));
-        card.addEventListener('dragend', () => card.classList.remove('dragging'));
-      });
+  // Optional: live search (if you have an #search input)
+  const search = document.getElementById('search');
+  if (search) {
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase();
+      const filtered = allPosts.filter(p =>
+        (p.title || '').toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        (p.category || '').toLowerCase().includes(q)
+      );
+      render(filtered);
+    });
+  }
 
-      const container = document.querySelector('.posts');
-      container.addEventListener('dragover', e => {
-        e.preventDefault();
-        const dragging = document.querySelector('.dragging');
-        const afterElement = getDragAfterElement(container, e.clientX);
-        if (!afterElement) {
-          container.appendChild(dragging);
-        } else {
-          container.insertBefore(dragging, afterElement);
-        }
-      });
-    }
-
-    function getDragAfterElement(container, x) {
-      const cards = [...container.querySelectorAll('.post-card:not(.dragging)')];
-      return cards.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = x - (box.left + box.width / 2);
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    loadPosts();
+  // Optional: category filter (if you have a #categories container with [data-filter] buttons)
+  const categories = document.getElementById('categories');
+  if (categories) {
+    categories.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      const f = btn.getAttribute('data-filter');
+      const list = (f === 'all')
+        ? allPosts
+        : allPosts.filter(p => (p.category || '').toLowerCase() === f.toLowerCase());
+      render(list);
+    });
+  }
+})();
   </script>
 <script src="mode.js"></script>
 
