@@ -1,5 +1,11 @@
 [
-    {
+  {
+    "date": "2025-09-08",
+    "entry": "built a poetry driven neovim writing environment piggy-backing off of [oviwrite](https://github.com/MiragianCycle/OVIWrite). will blog about it on [robotamri.ca](https://robotamri.ca) soon.",
+    "format": "note",
+    "tag": "tools"
+    },  
+  {
     "date": "2025-08-28",
     "entry": "poetry is being and [everywhere being is dancing](https://www.goodreads.com/book/show/2253688.Everywhere_Being_is_Dancing)",
     "format": "a little note",
