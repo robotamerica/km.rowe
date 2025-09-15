@@ -1,5 +1,11 @@
 [
   {
+    "date": "2025-09-15",
+    "entry": "started writing poems with [ovipoet](https://github.com/robotamerica/ovipoet) and i am really enjoying it!",
+    "format": "note",
+    "tag": "tools"
+    },  
+  {
     "date": "2025-09-08",
     "entry": "built a poetry driven neovim writing environment piggy-backing off of [oviwrite](https://github.com/MiragianCycle/OVIWrite). will blog about it on [robotamri.ca](https://robotamri.ca) soon.",
     "format": "note",
