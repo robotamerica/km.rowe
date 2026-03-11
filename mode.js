@@ -14,18 +14,18 @@
     } catch (_) {}
   }
 
-  function setButtonLabel(mode) {
-    const btn = document.getElementById("modeToggle");
-    if (!btn) return;
-    const labelMap = {
-      "alt-mode": "green mode",
-      "crt-mode": "blue mode",
-      "epaper-mode": "epaper mode",
-    };
-    btn.textContent = labelMap[mode] || "mode";
-    btn.setAttribute("aria-label", `switch to ${labelMap[mode] || "next"} `);
-  }
-
+function setButtonLabel(mode) {
+  const btn = document.getElementById("modeToggle");
+  if (!btn) return;
+  const labelMap = {
+    "alt-mode": "blue mode",
+    "crt-mode": "green mode",
+    "epaper-mode": "epaper mode",
+  };
+  btn.textContent = labelMap[mode] || "mode";
+  btn.setAttribute("aria-label", `switch to ${labelMap[mode] || "next"}`);
+}
+  
   function apply(mode) {
     const body = document.body;
     MODES.forEach((m) => body.classList.remove(m));
