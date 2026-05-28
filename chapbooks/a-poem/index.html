@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>a poem – km.rowe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      background: black;
+      color: #aaf0ff;
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body.alt-mode  { color: #aaf0ff; }
+    body.crt-mode  { color: #00ff8b; }
+    body.epaper-mode {
+      background: #f6f6f1 !important;
+      color: #1a1a1a !important;
+    }
+    body.epaper-mode .book-box {
+      background: #fbfbf8 !important;
+      color: #1a1a1a !important;
+      border-color: #aaa !important;
+      box-shadow: none !important;
+    }
+    body.epaper-mode .cover { background: #f6f6f1 !important; }
+
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+      z-index: 9999;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: 'VT323', monospace;
+    }
+    .button:disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    .cover {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9998;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem;
+    }
+    body.epaper-mode .cover { background: #f6f6f1 !important; }
+
+    pre {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 10px;
+    }
+
+    .crack { animation: shatter 1.2s ease-in-out forwards; }
+    @keyframes shatter {
+      0%   { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(3) rotate(720deg); opacity: 0; }
+    }
+
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 6rem 1rem 3rem 1rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+    .book-box {
+      width: 90%;
+      max-width: 720px;
+      height: 60vh;
+      border: 2px solid currentColor;
+      padding: 2rem;
+      margin: 1rem;
+      background: rgba(0,0,0,0.9);
+      box-shadow: 0 0 20px currentColor;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: currentColor black;
+    }
+    .book-box::-webkit-scrollbar { width: 6px; }
+    .book-box::-webkit-scrollbar-thumb { background-color: currentColor; }
+    .book-box::-webkit-scrollbar-track { background: transparent; }
+
+    .poem-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .page-number {
+      font-size: 1rem;
+    }
+
+    .page-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+      .toolbar { top: 5px; right: 5px; flex-direction: column; }
+      .button { padding: 0.3rem 0.8rem; font-size: 0.9rem; }
+      .book-box { padding: 1rem; height: 55vh; }
+      .cover pre { font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body class="alt-mode">
+
+  <div class="toolbar">
+    <button class="button" id="modeToggle">green mode</button>
+    <button class="button" onclick="exitPage(event)">exit</button>
+  </div>
+
+  <audio id="click-sound" src="/assets/click.wav" preload="auto"></audio>
+
+  <div class="cover" onclick="startBook()">
+    <pre id="cover-art">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⣶⠀⠀⠀⠀⢰⡆⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⣿⣀⣀⣀⣀⣸⡇⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀⠀⠀⢸⡇⠀⠀⣿⠀⠀
+⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠃⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</pre>
+    <h1>a poem</h1>
+    <h2>km. nada</h2>
+    <p><em>click to begin</em></p>
+  </div>
+
+  <div class="container" id="reader">
+    <div class="book-box" id="stanzaBox"></div>
+    <div class="controls">
+      <span class="page-number" id="pageIndicator">Page 1</span>
+    </div>
+    <div class="page-buttons">
+      <button class="button" id="btn-prev" onclick="prevPage()">← previous page</button>
+      <button class="button" id="btn-next" onclick="nextPage()">next page →</button>
+    </div>
+  </div>
+
+  <script>
+  const pages = [
+    {"title":"page 1","body":"let me speak in english\nmy mother(ly) tongue\nbut let me be embarrassing\n      in spanish\nnot embarrassed\nbut embarrassing\nas we embrace for a\n      tiny kernel of truth\nsomewhere amongst\nthe fallen leaves\nsomewhere deep\nbelow the ground\nsomewhere in a bottle\n      of orange wine\nwhere we can be\ntasajo tongue-tied\nlike a salty french kiss"},
+    {"title":"page 2","body":"steep the tea!\n\nwe are all the small voices\nwe are every school day\nand every class we\n               ever skipped\n\ngrind the coffee!"},
+    {"title":"page 3","body":"buckshot and a turkey feather\nwe \"yeehaw\" when we are free\nthe grocery store is a forest\nanimals animals everywhere\nif this poem is a log, pick up\n                your axe\nif this poem is a river, row row\n                row your boat\nan oar by any other name\nwill get you there just the same\n\ndrink your whisky neat!\n\nthis is a boilerplate\na fax and a memo"},
+    {"title":"page 4","body":"this is just a bunchawords\nall put together, nada fancy\n\nall my poems sound the same\nbecause they are the same poem\nthe same thought\nthe same life\nthe same person\n     who is many\nwho is happy\nwho is sad\nwho is writing poems\n     like love letters\nwho is silly\nwho is complicated\nwho is simple and daft"},
+    {"title":"page 5","body":"i said that my god is nature\n\ngod is dead as dead as god\nwe are a 52 card deck\nabout 2 cards short\ngo go gringo—don't go fish\ndon't make me quote\ntrout fishing in america\n'cause obviously i will\n\ni will i won't i wish i don't\n\nin '82 i was born\nsome 4 years before\nthe premiere of alf"},
+    {"title":"page 6","body":"pockets full of alfalfa sprouts\npickled onion and a half-loaf\ni remember every shoe full of sand\nevery moment hated on the beach\na sardine and an oyster\ni prefer to eat them in company\ninland, and perverse\n\nwe celebrate the wind"},
+    {"title":"page 7","body":"we are economy and class\nbut i've dropped a mug\n           or two\n           in my day\nceaseless ceramics that seem\neternally ephemeral\nmeryl streep me a witty rebuttal\nbut take it easy on me\ni am middle aged, which is\nthe worst/best age for cheese\nand the time, you become\nconscious of your inability to\nreally remember, when you\ncan just about forget what\nwas fiction and what was reality\nreally really, you gotta try this"},
+    {"title":"page 8","body":"split a whip, a horse and a donkey\n\ni am endlessly ending things\ni am partly cautious, but\noverly ostentatious\ndo you see what i mean?"}
+  ];
+
+  let current = 0;
+
+  function renderPage() {
+    const pg = pages[current];
+    document.getElementById('stanzaBox').innerHTML =
+      `<span class="poem-title">${pg.title}</span>` +
+      pg.body.replace(/\n/g, '<br>');
+    document.getElementById('pageIndicator').textContent =
+      `Page ${current + 1} of ${pages.length}`;
+    document.getElementById('btn-prev').disabled = (current === 0);
+    document.getElementById('btn-next').disabled = (current === pages.length - 1);
+    document.getElementById('stanzaBox').scrollTop = 0;
+  }
+
+  function nextPage() {
+    if (current < pages.length - 1) { current++; renderPage(); }
+  }
+  function prevPage() {
+    if (current > 0) { current--; renderPage(); }
+  }
+
+  function exitPage(e) {
+    e.stopPropagation();
+    window.location.href = '/chapbooks.html';
+  }
+
+  function startBook() {
+    const art = document.getElementById('cover-art');
+    art.classList.add('crack');
+    setTimeout(() => {
+      document.querySelector('.cover').style.display = 'none';
+      document.getElementById('reader').style.display = 'flex';
+      renderPage();
+    }, 1200);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('reader').style.display || document.getElementById('reader').style.display === 'none') return;
+    if (e.key === 'ArrowRight') nextPage();
+    if (e.key === 'ArrowLeft')  prevPage();
+  });
+  </script>
+
+  <script src="/mode.js"></script>
+</body>
+</html>
